@@ -17,12 +17,13 @@ is_playing = True  # Whether the game is currently being played
 GROUND_Y = 300  # The Y-coordinate of the ground level
 JUMP_GRAVITY_START_SPEED = -20  # The speed at which the player jumps
 players_gravity_speed = 0  # The current speed at which the player falls
+score = 0  # The player's current score
 
 # Load level assets
 SKY_SURF = pygame.image.load("graphics/level/sky.png").convert()
 GROUND_SURF = pygame.image.load("graphics/level/ground.png").convert()
 game_font = pygame.font.Font(pygame.font.get_default_font(), 50)
-score_surf = game_font.render("SCORE?", False, "Black")
+score_surf = game_font.render(str(score), False, "Black")
 score_rect = score_surf.get_rect(center=(400, 50))
 
 # Load sprite assets
@@ -32,7 +33,6 @@ player_surf = pygame.image.load(
 player_rect = player_surf.get_rect(bottomleft=(25, GROUND_Y))
 egg_surf = pygame.image.load("graphics/egg/egg_1.png").convert_alpha()
 egg_rect = egg_surf.get_rect(bottomleft=(800, GROUND_Y))
-
 
 while running:
     # Poll for events
@@ -56,13 +56,15 @@ while running:
                 egg_rect.left = 800
 
     if is_playing:
+        score += 1 # Add 1 point per frame the player is alive
+        score_rect = game_font.render(str(score), False, "Black").get_rect(center=(400, 50)) # Update the score
         screen.fill("purple")  # Wipe the screen
 
         # Blit the level assets
         screen.blit(SKY_SURF, (0, 0))
         screen.blit(GROUND_SURF, (0, GROUND_Y))
         pygame.draw.rect(screen, "#c0e8ec", score_rect)
-        pygame.draw.rect(screen, "#c0e8ec", score_rect, 10)
+        pygame.draw.rect(screen, "#c0e8ec", score_rect, 10) # Does this even do anything??
         screen.blit(score_surf, score_rect)
 
         # Adjust egg's horizontal location then blit it
@@ -82,9 +84,10 @@ while running:
         if egg_rect.colliderect(player_rect):
             is_playing = False
 
-    # When game is over, display game over message
+    # When game is over, display game over message and reset the score
     else:
         screen.fill("black")
+        score = 0
 
     # flip() the display to put your work on screen
     pygame.display.flip()

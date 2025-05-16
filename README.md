@@ -20,13 +20,7 @@ Once you are familiar, begin adding your features to the game. Make sure to docu
 
 Some features for you to consider adding:
 
-1. Creating a score counter
 2. Creating a transition screen by transforming surfaces
-3. Vary enemy spawn logic
-4. Animate the players
 5. Change the player and enemies; change the environment
-6. Add double jump
-7. Features related to increasing difficulty as the game progresses
 8. Add power-ups (for example score doubler, god mode, gain life)
 9. Add leaderboards, keep track of it in another txt file and display the top 10
-10. Use a life counter with a game over screen
