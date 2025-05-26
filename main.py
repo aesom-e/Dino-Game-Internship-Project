@@ -1,97 +1,279 @@
-"""Dino Game in Python
+# Note that this project is meant to be done in a single file. I'm sorry for this code
+# I also can't use classes, so it makes everything more messy
 
-A game similar to the famous Chrome Dino Game, built using pygame-ce.
-Made by intern: @bassemfarid, no one or nothing else. 🤖
-"""
-
+# Imports
 import pygame
+import random
+import time
 
-# Initialize Pygame and create a window
+# Constants
+WINDOW_HEIGHT               = 400
+WINDOW_WIDTH                = 800
+WINDOW_TITLE                = "Dino Game"
+FPS_CAP                     = 60
+GROUND_Y                    = 300
+WALK_ANIMATION_DELAY        = 6
+JUMP_GRAVITY_START_SPEED    = 15           # The speed at which the player jumps
+DEFAULT_FONT_SIZE           = 50
+ITEM_RESPAWN_VARIANCE       = 100
+PLAYER_SPAWN_LIVES          = 3
+MAX_LIVES                   = 5
+ITEM_SPEED_CAP              = 15
+HEART_SIZE                  = 40
+POWER_UP_SIZE               = 50
+POWER_UP_CHANCE             = 300          # There is a 1/POWER_UP_CHANCE each frame for a powerup to spawn
+ALIVE_BACKGROUND_COLOUR     = 0xFFA020F0   # The background colour when the player is alive
+DEAD_BACKGROUND_COLOUR      = 0x00000000   # The background colour when the player is dead
+SCORE_TEXT_COLOUR           = 0x000000FF   # RGBA format
+POWER_UP_TEXT_COLOUR        = 0xF7D80AFF
+GAME_OVER_TEXT_COLOUR       = 0xFFFFFFFF
+
+# Initialize pygame and set the random seed
+random.seed(time.time())
 pygame.init()
-screen = pygame.display.set_mode((800, 400))
-clock = pygame.time.Clock()
-running = True  # Pygame main loop, kills the pygame when False
+pygame.display.set_caption(WINDOW_TITLE)
+screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+clock  = pygame.time.Clock()
 
-# Game state variables
-is_playing = True  # Whether the game is currently being played
-GROUND_Y = 300  # The Y-coordinate of the ground level
-JUMP_GRAVITY_START_SPEED = -20  # The speed at which the player jumps
-players_gravity_speed = 0  # The current speed at which the player falls
-score = 0  # The player's current score
+# Constant assets
+SKY_SURFACE              = pygame.image.load("graphics/level/sky.png").convert()
+GROUND_SURFACE           = pygame.image.load("graphics/level/ground.png").convert()
+HEART_SURFACE            = pygame.transform.scale(pygame.image.load("graphics/level/heart.png").convert_alpha(), (HEART_SIZE, HEART_SIZE))
+GAME_FONT                = pygame.font.Font(pygame.font.get_default_font(), DEFAULT_FONT_SIZE)
+GAME_OVER_TEXT           = GAME_FONT.render("Game Over!", True, GAME_OVER_TEXT_COLOUR)
+GAME_OVER_TEXT_RECTANGLE = GAME_OVER_TEXT.get_rect(center=(WINDOW_WIDTH/2, WINDOW_HEIGHT/2))
 
-# Load level assets
-SKY_SURF = pygame.image.load("graphics/level/sky.png").convert()
-GROUND_SURF = pygame.image.load("graphics/level/ground.png").convert()
-game_font = pygame.font.Font(pygame.font.get_default_font(), 50)
-score_surf = game_font.render(str(score), False, "Black")
-score_rect = score_surf.get_rect(center=(400, 50))
+# Non-constant assets
+score_surface    = None
+score_rectangle  = None
+player_surface   = pygame.image.load("graphics/player/player_walk_1.png").convert_alpha()
+player_rectangle = player_surface.get_rect(bottomleft=(25, GROUND_Y))
+egg_surface      = pygame.image.load("graphics/egg/egg_1.png").convert_alpha()
+egg_rectangle    = egg_surface.get_rect(bottomleft=(WINDOW_WIDTH, GROUND_Y))
 
-# Load sprite assets
-player_surf = pygame.image.load(
-    "graphics/player/player_walk_1.png"
-).convert_alpha()
-player_rect = player_surf.get_rect(bottomleft=(25, GROUND_Y))
-egg_surf = pygame.image.load("graphics/egg/egg_1.png").convert_alpha()
-egg_rect = egg_surf.get_rect(bottomleft=(800, GROUND_Y))
+# State variables
+player_y_speed      = 0
+player_is_alive     = True
+player_animation    = "walk_1"
+player_walk_frames  = 0
+player_animations   = {"walk_1": pygame.image.load("graphics/player/player_walk_1.png").convert_alpha(),
+                       "walk_2": pygame.image.load("graphics/player/player_walk_2.png").convert_alpha(),
+                       "jump":   pygame.image.load("graphics/player/player_jump.png").convert_alpha()}
+egg_animation       = "1"
+egg_animations      = {"1": pygame.image.load("graphics/egg/egg_1.png").convert_alpha(),
+                       "2": pygame.image.load("graphics/egg/egg_2.png").convert_alpha()}
+egg_walk_frames     = 0
+score               = 0
+item_speed          = 5
+double_jumped       = False # Because 0 is not "pythonic"
+player_lives        = PLAYER_SPAWN_LIVES
+current_power_up    = None
+power_up_rectangle  = None
+god_mode_frames     = 0
+double_score_frames = 0
 
-while running:
-    # Poll for events
+# Helper functions
+def can_jump() -> bool:
+    """Checks if the player can jump
+    
+    Returns:
+        bool: True if the player can jump, False if not
+    """
+    global player_rectangle, double_jumped
+    if player_rectangle.bottom >= GROUND_Y:
+        return True
+    elif not double_jumped:
+        return True
+    return False
+
+
+def die() -> None:
+    """Handles resetting all state variables when the player dies"""
+    global player_is_alive, score, item_speed, player_lives, PLAYER_SPAWN_LIVES
+    player_is_alive = False
+    score = 0
+    item_speed = 5
+    player_lives = PLAYER_SPAWN_LIVES
+
+def update_player_sprite() -> None:
+    """Updates the player's sprite. Called each frame"""
+    # God I hate python
+    global player_walk_frames, WALK_ANIMATION_DELAY, player_animations, \
+           player_surface, player_animation, player_y_speed
+    if not player_y_speed:
+        player_animation = "walk_2"
+    elif player_y_speed > 0:
+        player_animation = "jump"
+    
+    # Switch the walk animation
+    match player_animation:
+        case "walk_1":
+            player_walk_frames += 1
+            if player_walk_frames == WALK_ANIMATION_DELAY:
+                player_walk_frames = 0
+                player_animation = "walk_2"
+        case "walk_2":
+            player_walk_frames += 1
+            if player_walk_frames == WALK_ANIMATION_DELAY:
+                player_walk_frames = 0
+                player_animation = "walk_1"
+    
+    player_surface = player_animations[player_animation]
+
+def update_egg_sprite() -> None:
+    """Updates the egg's sprite. Called each frame"""
+    global egg_animation, WALK_ANIMATION_DELAY, egg_surface, \
+           egg_animations, egg_walk_frames
+    
+    match egg_animation:
+        case "1":
+            egg_walk_frames += 1
+            if egg_walk_frames == WALK_ANIMATION_DELAY:
+                egg_walk_frames = 0
+                egg_animation = "2"
+        case "2":
+            egg_walk_frames += 1
+            if egg_walk_frames == WALK_ANIMATION_DELAY:
+                egg_walk_frames = 0
+                egg_animation = "1"
+    
+    egg_surface = egg_animations[egg_animation]
+
+def draw_hearts() -> None:
+    """Draws the player's lives to the top left corner of the screen"""
+    global HEART_SURFACE, player_lives, HEART_SIZE
+    for _ in range(player_lives):
+        heart_rectangle = (_*HEART_SIZE, 0)
+        screen.blit(HEART_SURFACE, heart_rectangle)
+
+# Power up functions and list
+def power_up_extra_life() -> None:
+    global player_lives
+    if player_lives < MAX_LIVES:
+        player_lives += 1
+
+def power_up_god_mode() -> None:
+    global god_mode_frames
+    god_mode_frames += 120
+    pass
+
+def power_up_double_score() -> None:
+    global double_score_frames
+    double_score_frames += 240
+    pass
+
+
+power_ups = [(pygame.transform.scale(pygame.image.load("graphics/level/heart.png").convert_alpha(), (POWER_UP_SIZE, POWER_UP_SIZE)), power_up_extra_life),
+             (pygame.transform.scale(pygame.image.load("graphics/powerups/god_mode.png").convert_alpha(), (POWER_UP_SIZE, POWER_UP_SIZE)), power_up_god_mode),
+             (pygame.transform.scale(pygame.image.load("graphics/powerups/double_score.png").convert_alpha(), (POWER_UP_SIZE, POWER_UP_SIZE)), power_up_double_score)]
+
+# Main loop (again, I'm sorry for this code)
+while True:
+    # Handle pygame events
     for event in pygame.event.get():
-        # pygame.QUIT --> user clicked X to close your window
         if event.type == pygame.QUIT:
-            running = False
-
-        elif is_playing:
-            # When player wants to jump by pressing SPACE
-            if (
-                event.type == pygame.KEYDOWN
-                and event.key == pygame.K_SPACE
-                or event.type == pygame.MOUSEBUTTONDOWN
-            ) and player_rect.bottom >= GROUND_Y:
-                players_gravity_speed = JUMP_GRAVITY_START_SPEED
+            exit(0)
+        elif player_is_alive:
+            # Handle jumping
+            # REWRITE THIS DOGSHIT
+            if ((event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE) or event.type == pygame.MOUSEBUTTONDOWN) and can_jump():
+                if player_rectangle.bottom < GROUND_Y:
+                    double_jumped = True
+                player_y_speed = JUMP_GRAVITY_START_SPEED
         else:
-            # When player wants to play again by pressing SPACE
+            # Handle restarting the game
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                is_playing = True
-                egg_rect.left = 800
+                player_is_alive = True
+                egg_rectangle.left = WINDOW_WIDTH
+    
+    # Handle the game itself
+    if player_is_alive:
+        # Adjust the score
+        if double_score_frames:
+            score += 2
+            score_surface = GAME_FONT.render(str(score), True, POWER_UP_TEXT_COLOUR)
+        else:
+            score += 1
+            score_surface = GAME_FONT.render(str(score), True, SCORE_TEXT_COLOUR)
+        score_rectangle = score_surface.get_rect(center=(WINDOW_WIDTH/2, 50))
 
-    if is_playing:
-        score += 1 # Add 1 point per frame the player is alive
-        score_rect = game_font.render(str(score), False, "Black").get_rect(center=(400, 50)) # Update the score
-        screen.fill("purple")  # Wipe the screen
+        # Decrement the frame counters
+        if double_score_frames:
+            double_score_frames -= 1
+        if god_mode_frames:
+            god_mode_frames -= 1
 
-        # Blit the level assets
-        screen.blit(SKY_SURF, (0, 0))
-        screen.blit(GROUND_SURF, (0, GROUND_Y))
-        pygame.draw.rect(screen, "#c0e8ec", score_rect)
-        pygame.draw.rect(screen, "#c0e8ec", score_rect, 10) # Does this even do anything??
-        screen.blit(score_surf, score_rect)
+        # Wipe the screen
+        screen.fill(ALIVE_BACKGROUND_COLOUR)
 
-        # Adjust egg's horizontal location then blit it
-        egg_rect.x -= 5
-        if egg_rect.right <= 0:
-            egg_rect.left = 800
-        screen.blit(egg_surf, egg_rect)
+        # Draw the constant-positioned assets to the screen
+        screen.blit(SKY_SURFACE, (0, 0))
+        screen.blit(GROUND_SURFACE, (0, GROUND_Y))
+        screen.blit(score_surface, score_rectangle)
+        draw_hearts()
 
-        # Adjust player's vertical location then blit it
-        players_gravity_speed += 1
-        player_rect.y += players_gravity_speed
-        if player_rect.bottom > GROUND_Y:
-            player_rect.bottom = GROUND_Y
-        screen.blit(player_surf, player_rect)
+        # Handle then draw the egg
+        egg_rectangle.x -= item_speed
+        if egg_rectangle.right <= 0:
+            egg_rectangle.left = WINDOW_WIDTH - random.randint(0, ITEM_RESPAWN_VARIANCE)
+            if item_speed < ITEM_SPEED_CAP:
+                item_speed += 1 # Increase the egg speed each loop to make the game harder
+        update_egg_sprite()
+        screen.blit(egg_surface, egg_rectangle)
 
-        # When player collides with enemy, game ends
-        if egg_rect.colliderect(player_rect):
-            is_playing = False
+        # Handle then draw the player
+        player_y_speed -= 1
+        update_player_sprite()
+        player_rectangle.y -= player_y_speed # y=0 is at the top
+        if player_rectangle.bottom >= GROUND_Y:
+            # Handle the player hitting the ground
+            player_rectangle.bottom = GROUND_Y
+            double_jumped = False
+        screen.blit(player_surface, player_rectangle)
 
-    # When game is over, display game over message and reset the score
+        # Handle then draw power ups
+        if current_power_up is not None:
+            power_up_rectangle.x -= item_speed
+            if power_up_rectangle.right <= 0:
+                current_power_up = None
+                power_up_rectangle = None
+            else:
+                screen.blit(current_power_up[0], power_up_rectangle)
+        else:
+            # Roll for a power up
+            if not random.randint(0, POWER_UP_CHANCE):
+                current_power_up = random.choice(power_ups)
+                
+                # Make sure an extra life doesn't spawn when the player can't collect one
+                if current_power_up == power_ups[0] and player_lives == MAX_LIVES:
+                    current_power_up = power_ups[random.randint(1, len(power_ups)-1)]
+
+                rectangle_position = (WINDOW_WIDTH - random.randint(0, ITEM_RESPAWN_VARIANCE), GROUND_Y)
+                power_up_rectangle = current_power_up[0].get_rect(bottomleft=rectangle_position)
+                
+                # Ensure the egg won't collide with the rectangle
+                if egg_rectangle.colliderect(power_up_rectangle):
+                    current_power_up = None
+                else:
+                    screen.blit(current_power_up[0], power_up_rectangle)
+
+        # Handle collisions
+        if egg_rectangle.colliderect(player_rectangle) and not god_mode_frames:
+            player_lives -= 1
+            # Reset the egg position to avoid multiple collisions
+            egg_rectangle.left = WINDOW_WIDTH - random.randint(0, ITEM_RESPAWN_VARIANCE)
+            if not player_lives:
+                die()
+        if power_up_rectangle and power_up_rectangle.colliderect(player_rectangle):
+            # Trigger the powerup then delete it
+            current_power_up[1]()
+            current_power_up = None
+            power_up_rectangle = None
     else:
-        screen.fill("black")
-        score = 0
-
-    # flip() the display to put your work on screen
+        # Draw the death screen
+        screen.fill(DEAD_BACKGROUND_COLOUR)
+        screen.blit(GAME_OVER_TEXT, GAME_OVER_TEXT_RECTANGLE)
+    
+    # Draw to the physical screen and enforce the FPS cap
     pygame.display.flip()
-
-    clock.tick(60)  # Limits game loop to 60 FPS
-
-pygame.quit()
+    clock.tick(FPS_CAP)
