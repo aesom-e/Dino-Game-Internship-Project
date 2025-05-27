@@ -1,10 +1,6 @@
 import pygame
-import random
 import init
-import constants
-import assets
 import state
-import power_ups
 from handlers import *
 import display
 
