@@ -1,5 +1,6 @@
 import pygame
 import constants
+import state
 
 # Constant assets
 SKY_SURFACE              = pygame.image.load("graphics/level/sky.png").convert()
@@ -22,3 +23,43 @@ egg_rectangle     = egg_surface.get_rect(bottomleft=(constants.WINDOW_WIDTH, con
 egg_animations    = {"1": pygame.image.load("graphics/egg/egg_1.png").convert_alpha(),
                     "2": pygame.image.load("graphics/egg/egg_2.png").convert_alpha()}
 power_up_rectangle  = None
+
+def update_player_sprite() -> None:
+    """Updates the player's sprite. Called each frame"""
+    if not state.player_y_speed:
+        state.player_animation = "walk_2"
+    elif state.player_y_speed > 0:
+        state.player_animation = "jump"
+    
+    # Switch the walk animation
+    match state.player_animation:
+        case "walk_1":
+            state.player_walk_frames += 1
+            if state.player_walk_frames == constants.WALK_ANIMATION_DELAY:
+                state.player_walk_frames = 0
+                state.player_animation = "walk_2"
+        case "walk_2":
+            state.player_walk_frames += 1
+            if state.player_walk_frames == constants.WALK_ANIMATION_DELAY:
+                state.player_walk_frames = 0
+                state.player_animation = "walk_1"
+    
+    global player_surface, player_animations
+    player_surface = player_animations[state.player_animation]
+
+def update_egg_sprite() -> None:
+    """Updates the egg's sprite. Called each frame"""
+    match state.egg_animation:
+        case "1":
+            state.egg_walk_frames += 1
+            if state.egg_walk_frames == constants.WALK_ANIMATION_DELAY:
+                state.egg_walk_frames = 0
+                state.egg_animation = "2"
+        case "2":
+            state.egg_walk_frames += 1
+            if state.egg_walk_frames == constants.WALK_ANIMATION_DELAY:
+                state.egg_walk_frames = 0
+                state.egg_animation = "1"
+    
+    global egg_surface, egg_animations
+    egg_surface = egg_animations[state.egg_animation]

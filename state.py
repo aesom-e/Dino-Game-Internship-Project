@@ -1,5 +1,6 @@
 import pygame
 import constants
+import assets
 
 player_y_speed      = 0
 player_is_alive     = True
@@ -14,3 +15,24 @@ player_lives        = constants.PLAYER_SPAWN_LIVES
 current_power_up    = None
 god_mode_frames     = 0
 double_score_frames = 0
+
+def can_jump() -> bool:
+    """Checks if the player can jump
+    
+    Returns:
+        bool: True if the player can jump, False if not
+    """
+    global double_jumped
+    if assets.player_rectangle.bottom >= constants.GROUND_Y:
+        return True
+    elif not double_jumped:
+        return True
+    return False
+
+def die() -> None:
+    """Handles resetting all state variables when the player dies"""
+    global player_is_alive, score, item_speed, player_lives
+    player_is_alive = False
+    score = 0
+    item_speed = 5
+    player_lives = constants.PLAYER_SPAWN_LIVES
