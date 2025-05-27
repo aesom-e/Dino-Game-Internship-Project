@@ -1,4 +1,3 @@
-import pygame
 import init
 import state
 from handlers import *
@@ -32,3 +31,5 @@ if __name__ == "__main__":
         
         # Draw to the physical screen and enforce the FPS cap
         display.draw_frame_to_screen()
+else:
+    raise RuntimeError("The main.py file cannot be imported")

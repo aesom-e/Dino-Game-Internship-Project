@@ -81,8 +81,8 @@ def handle_collisions() -> None:
         # Reset the egg position to avoid multiple collisions
         assets.egg_rectangle.left = constants.WINDOW_WIDTH - random.randint(0, constants.ITEM_RESPAWN_VARIANCE)
         if not state.player_lives:
-            state.die()
-    if assets.power_up_rectangle is not None and assets.power_up_rectangle.colliderect(assets.player_rectangle):
+            handle_death()
+    if assets.power_up_rectangle is not None and assets.power_up_rectangle.colliderect(assets.player_rectangle) and state.current_power_up:
         # Trigger the powerup then delete it
         state.current_power_up[1]()
         state.current_power_up = None
@@ -106,3 +106,33 @@ def handle_power_up_roll() -> None:
                 state.current_power_up = None
             else: 
                 assets.screen.blit(state.current_power_up[0], assets.power_up_rectangle)
+
+def handle_death() -> None:
+    """Called when the player dies. Handles the resetting of state variables and leaderboard"""
+    # Handle the leaderboard
+    leaderboard = open("leaderboard.txt", "r")
+    # Read the current records
+    records = [int(_) for _ in leaderboard.read().split('\n') if _]
+
+    # Add the current score into records if it fits
+    records.append(state.score)
+    records.sort(reverse=True)
+    if len(records) > 10:
+        records.pop()
+
+    # Clear leaderboards.txt
+    leaderboard.close()
+    leaderboard = open("leaderboard.txt", "w")
+
+    # Write the updated records
+    for _, record in enumerate(records):
+        leaderboard.write(str(record))
+        if _ != len(records)-1:
+            leaderboard.write('\n')
+    leaderboard.close()
+
+    # Reset state variables
+    state.player_is_alive = False
+    state.score = 0
+    state.item_speed = 5
+    state.player_lives = constants.PLAYER_SPAWN_LIVES

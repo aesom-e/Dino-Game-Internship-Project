@@ -31,11 +31,3 @@ def can_jump() -> bool:
     elif not double_jumped:
         return True
     return False
-
-def die() -> None:
-    """Handles resetting all state variables when the player dies"""
-    global player_is_alive, score, item_speed, player_lives
-    player_is_alive = False
-    score = 0
-    item_speed = 5
-    player_lives = constants.PLAYER_SPAWN_LIVES

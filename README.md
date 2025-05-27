@@ -31,7 +31,6 @@ Some features for you to consider adding:
 
 - Creating a transition screen by transforming surfaces
 - Change the player,enemies, and environmental assets
-- Add power-ups (for example score doubler, god mode, gain life)
 - Add leaderboards, keep track of it in another txt file and display the top 10
 - Add a pause menu
 - Add a settings menu
