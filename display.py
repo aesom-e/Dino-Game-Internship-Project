@@ -1,4 +1,4 @@
-# Protection for running this file on its own
+# Protection against running this file on its own
 if __name__ == "__main__":
     raise RuntimeError(f"The {__file__.split('\\')[-1][:-3]} module should not be run on its own. Please run main.py instead")
 
@@ -43,10 +43,15 @@ def draw_death_screen() -> None:
         record_text_rectangle = record_text.get_rect(center=(600, 30*_+80))
         assets.screen.blit(record_text, record_text_rectangle)
 
-def draw_objects() -> None:
-    """Draw the objects on screen"""
+def draw_objects(update_sprites: bool=True) -> None:
+    """Draw the objects on screen
+    
+    Args:
+        update_sprites (bool): True to update animations, False to not. Default True
+    """
     # Draw the egg
-    assets.update_egg_sprite()
+    if update_sprites:
+        assets.update_egg_sprite()
     assets.screen.blit(assets.egg_surface, assets.egg_rectangle)
     
     # Draw the player

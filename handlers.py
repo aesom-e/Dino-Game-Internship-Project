@@ -1,4 +1,4 @@
-# Protection for running this file on its own
+# Protection against running this file on its own
 if __name__ == "__main__":
     raise RuntimeError(f"The {__file__.split('\\')[-1][:-3]} module should not be run on its own. Please run main.py instead")
 
@@ -8,23 +8,38 @@ import assets
 import state
 import power_ups
 import random
+import state_handler
 
 def handle_events() -> None:
     """Handles pygame events within the game"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit(0)
-        elif state.player_is_alive:
-            # Handle jumping
-            if ((event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE) or event.type == pygame.MOUSEBUTTONDOWN) and state.can_jump():
-                if assets.player_rectangle.bottom < constants.GROUND_Y:
-                    state.double_jumped = True
-                state.player_y_speed = constants.JUMP_GRAVITY_START_SPEED
-        else:
-            # Handle restarting the game
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                state.player_is_alive = True
-                assets.egg_rectangle.left = constants.WINDOW_WIDTH
+        match state_handler.current_state:
+            case state_handler.PLAYING:
+                # Handle jumping
+                if ((event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE) or event.type == pygame.MOUSEBUTTONDOWN) and state.can_jump():
+                    if assets.player_rectangle.bottom < constants.GROUND_Y:
+                        state.double_jumped = True
+                    state.player_y_speed = constants.JUMP_GRAVITY_START_SPEED
+                
+                # Handle pausing
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    state_handler.current_state = state_handler.PAUSED
+            case state_handler.DEAD:
+                # Handle restarting the game
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                    state.player_is_alive = True
+                    assets.egg_rectangle.left = constants.WINDOW_WIDTH
+                    state_handler.current_state = state_handler.PLAYING
+            case state_handler.PAUSED:
+                # Handle unpausing
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    state_handler.current_state = state_handler.PLAYING
+            case state_handler.MENU:
+                pass
+            case _:
+                raise ValueError(f"Unknown current_state: {state_handler.current_state}")
 
 def handle_score() -> None:
     """Handles the score incrementing each frame"""
@@ -137,3 +152,6 @@ def handle_death() -> None:
     state.score = 0
     state.item_speed = 5
     state.player_lives = constants.PLAYER_SPAWN_LIVES
+
+    # Set the game state
+    state_handler.current_state = state_handler.DEAD

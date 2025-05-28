@@ -30,8 +30,7 @@ Once you are familiar, begin adding your features to the game. Make sure to docu
 Some features for you to consider adding:
 
 - Creating a transition screen by transforming surfaces
-- Change the player,enemies, and environmental assets
-- Add leaderboards, keep track of it in another txt file and display the top 10
+- Change the player, enemies, and environmental assets
 - Add a pause menu
 - Add a settings menu
 - Add sound effects and background music
