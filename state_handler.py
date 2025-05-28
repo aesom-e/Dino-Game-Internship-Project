@@ -44,6 +44,9 @@ def handle() -> None:
             display.wipe()
             display.draw_background()
             display.draw_objects(update_sprites=False)
+
+            # Blur the screen
+            display.blur()
         case "_menu":
             pass
         case _:

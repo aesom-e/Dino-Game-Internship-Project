@@ -1,6 +1,5 @@
 import init
-import state
-from handlers import *
+from handlers import handle_events
 import display
 import state_handler
 

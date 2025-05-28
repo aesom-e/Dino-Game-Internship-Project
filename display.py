@@ -66,3 +66,14 @@ def draw_frame_to_screen() -> None:
     """Draws the frame in the frame buffer onto the screen and cap FPS"""
     pygame.display.flip()
     assets.clock.tick(constants.FPS_CAP)
+
+def blur() -> None:
+    """Blurs the screen"""
+    # The way we go about this is to downscale the screen and then re-upscale it,
+    # losing information and bluring the screen
+    downscale_size = (int(constants.WINDOW_WIDTH*(1/constants.BLUR_POWER)), int(constants.WINDOW_HEIGHT*(1/constants.BLUR_POWER)))
+    downscaled_surface = pygame.transform.smoothscale(assets.screen.copy(), downscale_size)
+    blurred_surface = pygame.transform.smoothscale(downscaled_surface, (constants.WINDOW_WIDTH, constants.WINDOW_HEIGHT))
+
+    # Now draw the blurred surface
+    assets.screen.blit(blurred_surface, (0, 0))
