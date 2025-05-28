@@ -27,6 +27,22 @@ def draw_death_screen() -> None:
     assets.screen.fill(constants.DEAD_BACKGROUND_COLOUR)
     assets.screen.blit(assets.GAME_OVER_TEXT, assets.GAME_OVER_TEXT_RECTANGLE)
 
+    # Draw the player's score
+    player_score = assets.SMALL_FONT.render(f"Your Score: {state.score_on_death}",
+                                            True,
+                                            constants.GAME_OVER_TEXT_COLOUR)
+    player_score_rectangle = player_score.get_rect(center=(200, constants.WINDOW_HEIGHT/2+50))
+    assets.screen.blit(player_score, player_score_rectangle)
+    
+    # Draw the leaderboard
+    assets.screen.blit(assets.LEADERBOARD_TEXT, assets.LEADERBOARD_TEXT_RECTANGLE)
+    with open("leaderboard.txt", "r") as f:
+        records = sorted([int(_) for _ in f.read().split('\n') if _], reverse=True)
+    for _, record in enumerate(records):
+        record_text = assets.SMALL_FONT.render(str(record), True, constants.LEADERBOARD_TEXT_COLOUR)
+        record_text_rectangle = record_text.get_rect(center=(600, 30*_+80))
+        assets.screen.blit(record_text, record_text_rectangle)
+
 def draw_objects() -> None:
     """Draw the objects on screen"""
     # Draw the egg

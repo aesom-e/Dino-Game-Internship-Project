@@ -11,6 +11,7 @@ player_animation    = "walk_1"
 player_walk_frames  = 0
 egg_animation       = "1"
 egg_walk_frames     = 0
+score_on_death      = 0 # Set when the player dies. Used for the death screen
 score               = 0
 item_speed          = 5
 double_jumped       = False

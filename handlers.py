@@ -132,6 +132,7 @@ def handle_death() -> None:
     leaderboard.close()
 
     # Reset state variables
+    state.score_on_death = state.score
     state.player_is_alive = False
     state.score = 0
     state.item_speed = 5
