@@ -9,12 +9,19 @@ import state
 import power_ups
 import random
 import state_handler
+import input_handler
 
 def handle_events() -> None:
     """Handles pygame events within the game"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit(0)
+        
+        # Pass any clicks to the input handler
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            input_handler.handle_click(pygame.mouse.get_pos())
+        
+        # Handle any outstanding events
         match state_handler.current_state:
             case state_handler.PLAYING:
                 # Handle jumping
@@ -42,6 +49,7 @@ def handle_events() -> None:
                 raise ValueError(f"Unknown current_state: {state_handler.current_state}")
 
 def handle_score() -> None:
+
     """Handles the score incrementing each frame"""
     if state.double_score_frames:
         state.score += 2
