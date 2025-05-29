@@ -11,6 +11,7 @@ WALK_ANIMATION_DELAY        = 6
 JUMP_GRAVITY_START_SPEED    = 15           # The speed at which the player jumps
 DEFAULT_FONT_SIZE           = 50
 SMALL_FONT_SIZE             = 26
+MENU_FONT_SIZE              = 30
 ITEM_RESPAWN_VARIANCE       = 100
 PLAYER_SPAWN_LIVES          = 3
 MAX_LIVES                   = 5

@@ -6,6 +6,8 @@ import pygame
 import constants
 import assets
 import state
+import input_handler
+import text_handler
 
 def wipe() -> None:
     """Wipes the screen"""
@@ -31,7 +33,7 @@ def draw_death_screen() -> None:
     player_score = assets.SMALL_FONT.render(f"Your Score: {state.score_on_death}",
                                             True,
                                             constants.GAME_OVER_TEXT_COLOUR)
-    player_score_rectangle = player_score.get_rect(center=(200, constants.WINDOW_HEIGHT/2+50))
+    player_score_rectangle = player_score.get_rect(center=(200, constants.WINDOW_HEIGHT/2+25))
     assets.screen.blit(player_score, player_score_rectangle)
     
     # Draw the leaderboard
@@ -61,6 +63,11 @@ def draw_objects(update_sprites: bool=True) -> None:
     if state.current_power_up is not None:
         if assets.power_up_rectangle.right > 0:
             assets.screen.blit(state.current_power_up[0], assets.power_up_rectangle)
+
+def draw_others() -> None:
+    """Draws objects registered in the different handlers"""
+    input_handler.draw_buttons()
+    text_handler.draw_text_objects()
 
 def draw_frame_to_screen() -> None:
     """Draws the frame in the frame buffer onto the screen and cap FPS"""

@@ -19,7 +19,8 @@ def handle_events() -> None:
         
         # Pass any clicks to the input handler
         if event.type == pygame.MOUSEBUTTONDOWN:
-            input_handler.handle_click(pygame.mouse.get_pos())
+            if input_handler.handle_click(pygame.mouse.get_pos()):
+                return
         
         # Handle any outstanding events
         match state_handler.current_state:

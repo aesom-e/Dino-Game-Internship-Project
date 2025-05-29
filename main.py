@@ -11,6 +11,9 @@ if __name__ == "__main__":
         # Let the state handle do its job
         state_handler.handle()
         
+        # Draw other handled objects to the screen
+        display.draw_others()
+
         # Draw to the physical screen and enforce the FPS cap
         display.draw_frame_to_screen()
 else:
