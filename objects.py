@@ -1,7 +1,12 @@
+# Protection against running this file on its own
+if __name__ == "__main__":
+    raise RuntimeError(f"The {__file__.split('\\')[-1][:-3]} module should not be run on its own. Please run main.py instead")
+
 import constants
 import state_handler
 import input_handler
 import text_handler
+import sprite_handler
 
 # Button functions. No docstrings for these
 def _resume_game() -> None:
