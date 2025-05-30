@@ -8,6 +8,7 @@ if __name__ == "__main__":
 import handlers
 import display
 import input_handler
+import text_handler
 import objects
 
 # Used so that code can be written like state_handler.current_state = state_handler.DEAD
@@ -31,8 +32,9 @@ def handle() -> None:
             handlers.handle_power_up_roll()
             handlers.handle_collisions()
 
-            # Hide buttons that shouldn't be shown
+            # Hide objects that shouldn't be shown
             input_handler.set_button_status(objects.RESUME_GAME_BUTTON, False)
+            text_handler.set_text_status(objects.PAUSED_GAME_MENU_TEXT, False)
 
             # Draw the frame
             display.wipe()
@@ -53,8 +55,9 @@ def handle() -> None:
             # Blur the screen
             display.blur()
 
-            # Show the pause menu buttons
-            input_handler.set_button_status(objects.RESUME_GAME, True)
+            # Show the pause menu
+            input_handler.set_button_status(objects.RESUME_GAME_BUTTON, True)
+            text_handler.set_text_status(objects.PAUSED_GAME_MENU_TEXT, True)
         case "_menu":
             pass
         case _:

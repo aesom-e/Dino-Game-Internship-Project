@@ -1,3 +1,5 @@
+"""Dino Game"""
+
 import init
 from handlers import handle_events
 import display

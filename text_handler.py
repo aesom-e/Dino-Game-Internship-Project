@@ -87,5 +87,5 @@ def draw_text_objects() -> None:
         if active:
             text_surface = font.render(text, True, colour)
             text_rectangle = text_surface.get_rect()
-            text_surface.center = center
+            text_rectangle.center = center
             assets.screen.blit(text_surface, text_rectangle)
