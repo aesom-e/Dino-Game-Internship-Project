@@ -13,9 +13,7 @@ GROUND_SURFACE             = pygame.image.load("graphics/level/ground.png").conv
 HEART_SURFACE              = pygame.transform.scale(pygame.image.load("graphics/level/heart.png").convert_alpha(), (constants.HEART_SIZE, constants.HEART_SIZE))
 GAME_FONT                  = pygame.font.Font(pygame.font.get_default_font(), constants.DEFAULT_FONT_SIZE)
 SMALL_FONT                 = pygame.font.Font(pygame.font.get_default_font(), constants.SMALL_FONT_SIZE)
-GAME_OVER_TEXT             = GAME_FONT.render("Game Over!", True, constants.GAME_OVER_TEXT_COLOUR)
-GAME_OVER_TEXT_RECTANGLE   = GAME_OVER_TEXT.get_rect(center=(200, constants.WINDOW_HEIGHT/2-25))
-LEADERBOARD_TEXT           = SMALL_FONT.render("Top Scores", True, constants.GAME_OVER_TEXT_COLOUR)
+LEADERBOARD_TEXT           = SMALL_FONT.render("Top Scores", True, 0)
 LEADERBOARD_TEXT_RECTANGLE = LEADERBOARD_TEXT.get_rect(center=(600, 50))
 
 # Non-constant assets

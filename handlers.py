@@ -10,6 +10,8 @@ import power_ups
 import random
 import state_handler
 import input_handler
+import text_handler
+import objects
 
 def handle_events() -> None:
     """Handles pygame events within the game"""
@@ -50,19 +52,13 @@ def handle_events() -> None:
                 raise ValueError(f"Unknown current_state: {state_handler.current_state}")
 
 def handle_score() -> None:
-
     """Handles the score incrementing each frame"""
     if state.double_score_frames:
         state.score += 2
-        assets.score_surface = assets.GAME_FONT.render(str(state.score),
-                                                        True,
-                                                        constants.POWER_UP_TEXT_COLOUR)
+        text_handler.modify_text(objects.SCORE_TEXT, colour=(247, 216, 10), text=str(state.score))
     else:
         state.score += 1
-        assets.score_surface = assets.GAME_FONT.render(str(state.score),
-                                                        True,
-                                                        constants.SCORE_TEXT_COLOUR)
-    assets.score_rectangle = assets.score_surface.get_rect(center=(constants.WINDOW_WIDTH/2, 50))
+        text_handler.modify_text(objects.SCORE_TEXT, colour=(0, 0, 0), text=str(state.score))
 
 def handle_frame_counters() -> None:
     """Handles the frame counters"""

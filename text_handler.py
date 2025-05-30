@@ -49,7 +49,7 @@ def register_text(text_center: tuple[float, float],
     return len(_registered_texts)-1
 
 def modify_text(text_id: int,
-                text_center: tuple[float, FloatingPointError] = None,
+                text_center: tuple[float, float] = None,
                 colour: tuple[int, int, int] = None,
                 font_size: int = None,
                 text: str = None) -> None:
@@ -89,3 +89,15 @@ def draw_text_objects() -> None:
             text_rectangle = text_surface.get_rect()
             text_rectangle.center = center
             assets.screen.blit(text_surface, text_rectangle)
+
+def draw_specifically(text_id: int) -> None:
+    """Draws the specified text object whether it's active or not
+    
+    Args:
+        text_id (int): The ID of the text object to draw
+    """
+    center, colour, font, text, active = tuple(_registered_texts[text_id])
+    text_surface = font.render(text, True, colour)
+    text_rectangle = text_surface.get_rect()
+    text_rectangle.center = center
+    assets.screen.blit(text_surface, text_rectangle)

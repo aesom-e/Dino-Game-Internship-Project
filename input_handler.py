@@ -29,6 +29,7 @@ import rectangle
 # int active; // If active is 0, it's hidden and clicking does not call onClick()
 
 _buttons = []
+_drawn_this_frame = [] # For buttons drawn this frame
 
 def register_button(button_rectangle: tuple[float, float, float, float, str | None],
                     text_colour: tuple[int, int, int],
@@ -112,6 +113,25 @@ def draw_buttons() -> None:
             text_rectangle.center = (rectangle[0] + rectangle[2] // 2, rectangle[1] + rectangle[3] // 2)
             assets.screen.blit(text_surface, text_rectangle)
 
+def draw_specifically(button_id: int) -> None:
+    """Draws the specified button whether it's active or not
+    
+    Args:
+        button_id (int): The ID of the button to draw
+    """
+    rectangle, text_colour, background_colour, font, text, on_click, active = tuple(_buttons[button_id])
+    
+    # Draw the button background
+    if background_colour is not None:
+        pygame.draw.rect(assets.screen, background_colour, rectangle)
+    
+    # Render the button text
+    text_surface = font.render(text, True, text_colour)
+    text_rectangle = text_surface.get_rect()
+    text_rectangle.center = (rectangle[0] + rectangle[2] // 2, rectangle[1] + rectangle[3] // 2)
+    assets.screen.blit(text_surface, text_rectangle)
+
+    _drawn_this_frame.append(button_id)
 
 def handle_click(click_pos: tuple[int, int]) -> bool:
     """Handles a pygame click and calls any button the user clicked on
@@ -122,10 +142,12 @@ def handle_click(click_pos: tuple[int, int]) -> bool:
     Returns:
         bool: True to cancel the event, False to allow it
     """
+    global _drawn_this_frame
+
     cancel_event = False
-    for button in _buttons:
-        # Check if the button is active
-        if button[6]:
+    for _, button in enumerate(_buttons):
+        # Check if the button is active or has been drawn this frame
+        if button[6] or _ in _drawn_this_frame:
             # Check if the click was on the button
             if button[0][0] <= click_pos[0] <= button[0][0] + button[0][2] and \
                button[0][1] <= click_pos[1] <= button[0][1] + button[0][3]:
@@ -135,4 +157,7 @@ def handle_click(click_pos: tuple[int, int]) -> bool:
 
                     # Tell the event handler to cancel the event
                     cancel_event = True
+    # Reset the _drawn_this_frame list
+    _drawn_this_frame = []
+
     return cancel_event
