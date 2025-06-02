@@ -122,6 +122,9 @@ def handle_death() -> None:
     sprite_handler.set_sprite_status(objects.POWER_UP_SPRITE, False)
     state.current_power_up = None
     
+    # Update the score display
+    text_handler.modify_text(objects.GAME_OVER_SCORE_TEXT, text=f"Your Score: {state.score}")
+
     # Handle the leaderboard
     leaderboard = open("leaderboard.txt", "r")
     # Read the current records
@@ -145,7 +148,6 @@ def handle_death() -> None:
     leaderboard.close()
 
     # Reset state variables
-    state.score_on_death = state.score
     state.player_is_alive = False
     state.score = 0
     state.item_speed = 5

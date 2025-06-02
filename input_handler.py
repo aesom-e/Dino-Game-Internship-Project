@@ -33,6 +33,7 @@ _drawn_this_frame = [] # For buttons drawn this frame
 
 def register_button(button_rectangle: tuple[float, float, float, float, str | None],
                     text_colour: tuple[int, int, int],
+                    hover_colour: tuple[int, int, int] | None,
                     background_colour: tuple[int, int, int] | None,
                     font_size: int,
                     text: str,
@@ -42,6 +43,8 @@ def register_button(button_rectangle: tuple[float, float, float, float, str | No
     Args:
         button_rectangle (tuple[float, float, float, float, str | None]): The button's rectangle
         text_colour (tuple[int, int, int]): The colour of the button's text
+        hover_colour (tuple[int, int, int] | None): The colour of the button's text when the mouse is hovering on it.
+                                                    None to not have a hover effect
         background_colour (tuple[int, int, int] | None): The colour of the button's background. None to make it transparent
         font_size(int): The font size of the button's text
         text (str): The button's text
@@ -53,13 +56,21 @@ def register_button(button_rectangle: tuple[float, float, float, float, str | No
     # Construct the font now to save time rendering
     font = pygame.font.Font(pygame.font.get_default_font(), font_size)
 
-    _buttons.append([rectangle.get_rectangle(button_rectangle), text_colour, background_colour, font, text, on_click, False])
+    _buttons.append([rectangle.get_rectangle(button_rectangle),
+                     text_colour,
+                     hover_colour,
+                     background_colour,
+                     font,
+                     text,
+                     on_click,
+                     False])
     return len(_buttons)-1
 
 def modify_button(button_id: int,
                   button_rectangle: tuple[float, float, float, float, str | None] = None,
                   text_colour: tuple[int, int, int] = None,
-                  background_colour: tuple[int, int, int] | None = False, # Because None is an acceptable argument, I use False as default
+                  hover_colour: tuple[int, int, int] | None = False,
+                  background_colour: tuple[int, int, int] | None = False,
                   font_size: int = None,
                   text: str = None,
                   on_click: Callable[[None], None] = None) -> None:
@@ -69,6 +80,7 @@ def modify_button(button_id: int,
         button_id (int): The ID of the button to modify
         button_rectangle (tuple[float, float, float, float, str | None]): The new rectangle, leave blank to not modify
         text_colour (tuple[int, int, int]): The new text colour; leave blank to not modify
+        hover_colour (tuple[int, int, int] | None): The new hover colour; leave blank to not modify
         background_colour (tuple[int, int, int] | None): The new background colour; leave blank to not modify
         font_size (int): The new font size; leave blank to not modify
         text (str): The new text; leave blank to not modify
@@ -78,14 +90,16 @@ def modify_button(button_id: int,
         _buttons[button_id][0] = rectangle.get_rectangle(button_rectangle)
     if text_colour is not None:
         _buttons[button_id][1] = text_colour
+    if hover_colour is not False:
+        _buttons[button_id][2] = hover_colour
     if background_colour is not False:
-        _buttons[button_id][2] = background_colour
+        _buttons[button_id][3] = background_colour
     if font_size is not None:
-        _buttons[button_id][3] = pygame.font.Font(pygame.font.get_default_font(), font_size)
+        _buttons[button_id][4] = pygame.font.Font(pygame.font.get_default_font(), font_size)
     if text is not None:
-        _buttons[button_id][4] = text
+        _buttons[button_id][5] = text
     if on_click is not None:
-        _buttons[button_id][5] = on_click
+        _buttons[button_id][6] = on_click
 
 def set_button_status(button_id: int, active: bool) -> None:
     """Sets the status of a single button
@@ -94,24 +108,32 @@ def set_button_status(button_id: int, active: bool) -> None:
         button_id (int): The ID of the button to modify
         active (bool): True to make the button active, False to deactivate it
     """
-    _buttons[button_id][6] = active
+    _buttons[button_id][7] = active
 
 def draw_buttons() -> None:
     """Draws the active buttons"""
     for button in _buttons:
         # Get all of the different properties of the button
-        rectangle, text_colour, background_colour, font, text, on_click, active = tuple(button)
+        button_rectangle, text_colour, hover_colour, background_colour, font, text, on_click, active = tuple(button)
 
         if active:
             # Draw the button background
             if background_colour is not None:
-                pygame.draw.rect(assets.screen, background_colour, rectangle)
+                pygame.draw.rect(assets.screen, background_colour, button_rectangle)
+
+            # Check if the button should use the hover_colour
+            if hover_colour is not None:
+                use_hover = rectangle.point_in_rectange(pygame.mouse.get_pos(), button_rectangle)
+            else: use_hover = False
 
             # Render the button text
-            text_surface = font.render(text, True, text_colour)
+            text_surface = font.render(text, True, hover_colour if use_hover else text_colour)
             text_rectangle = text_surface.get_rect()
-            text_rectangle.center = (rectangle[0] + rectangle[2] // 2, rectangle[1] + rectangle[3] // 2)
+            text_rectangle.center = (button_rectangle[0] + button_rectangle[2] // 2, button_rectangle[1] + button_rectangle[3] // 2)
             assets.screen.blit(text_surface, text_rectangle)
+
+            # Update with the hover colour if the mouse is hovering over it
+
 
 def draw_specifically(button_id: int) -> None:
     """Draws the specified button whether it's active or not
@@ -119,16 +141,21 @@ def draw_specifically(button_id: int) -> None:
     Args:
         button_id (int): The ID of the button to draw
     """
-    rectangle, text_colour, background_colour, font, text, on_click, active = tuple(_buttons[button_id])
+    button_rectangle, text_colour, hover_colour, background_colour, font, text, on_click, active = tuple(_buttons[button_id])
     
     # Draw the button background
     if background_colour is not None:
         pygame.draw.rect(assets.screen, background_colour, rectangle)
     
+    # Check if the button should use the hover_colour
+    if hover_colour is not None:
+        use_hover = rectangle.point_in_rectange(pygame.mouse.get_pos(), button_rectangle)
+    else: use_hover = False
+
     # Render the button text
-    text_surface = font.render(text, True, text_colour)
+    text_surface = font.render(text, True, hover_colour if use_hover else text_colour)
     text_rectangle = text_surface.get_rect()
-    text_rectangle.center = (rectangle[0] + rectangle[2] // 2, rectangle[1] + rectangle[3] // 2)
+    text_rectangle.center = (button_rectangle[0] + button_rectangle[2] // 2, button_rectangle[1] + button_rectangle[3] // 2)
     assets.screen.blit(text_surface, text_rectangle)
 
     _drawn_this_frame.append(button_id)
@@ -147,13 +174,12 @@ def handle_click(click_pos: tuple[int, int]) -> bool:
     cancel_event = False
     for _, button in enumerate(_buttons):
         # Check if the button is active or has been drawn this frame
-        if button[6] or _ in _drawn_this_frame:
+        if button[7] or _ in _drawn_this_frame:
             # Check if the click was on the button
-            if button[0][0] <= click_pos[0] <= button[0][0] + button[0][2] and \
-               button[0][1] <= click_pos[1] <= button[0][1] + button[0][3]:
+            if rectangle.point_in_rectange(click_pos, button[0]):
                 # Call the function associated with the button
-                if button[5] is not None:
-                    button[5]()
+                if button[6] is not None:
+                    button[6]()
 
                     # Tell the event handler to cancel the event
                     cancel_event = True

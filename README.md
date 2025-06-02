@@ -31,6 +31,5 @@ Some features for you to consider adding:
 
 - Creating a transition screen by transforming surfaces
 - Change the player, enemies, and environmental assets
-- Add a pause menu
 - Add a settings menu
 - Add sound effects and background music

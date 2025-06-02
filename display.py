@@ -15,6 +15,14 @@ def wipe() -> None:
     """Wipes the screen"""
     assets.screen.fill(0)
 
+def draw_solid_background(colour: tuple[int, int, int]) -> None:
+    """Draws a solid background to the screen
+    
+    Args:
+        colour (tuple[int, int, int]): The colour to fill the background with
+    """
+    assets.screen.fill(colour)
+
 def draw_background() -> None:
     """Draws the background of the game"""
     assets.screen.blit(assets.SKY_SURFACE, (0, 0))
@@ -25,14 +33,14 @@ def draw_background() -> None:
         heart_rectangle = (_*constants.HEART_SIZE, 0)
         assets.screen.blit(assets.HEART_SURFACE, heart_rectangle)
 
-def draw_objects(update_sprites: bool=True) -> None:
+def draw_objects(draw_player: bool=True) -> None:
     """Draw the objects on screen
     
     Args:
-        update_sprites (bool): True to update animations, False to not. Default True
+        draw_player (bool): True to draw the player, False to not. Default True
     """    
     # Draw the player
-    assets.screen.blit(assets.player_surface, assets.player_rectangle)
+    if draw_player: assets.screen.blit(assets.player_surface, assets.player_rectangle)
 
     # Draw the objects registered with the different handlers
     input_handler.draw_buttons()

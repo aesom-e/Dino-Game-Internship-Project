@@ -5,6 +5,7 @@
 if __name__ == "__main__":
     raise RuntimeError(f"The {__file__.split('\\')[-1][:-3]} module should not be run on its own. Please run main.py instead")
 
+import constants
 import handlers
 import display
 import input_handler
@@ -18,7 +19,7 @@ DEAD    = "_dead"
 PAUSED  = "_paused"
 MENU    = "_menu"
 
-current_state = PLAYING
+current_state = MENU
 
 _object_states = {}
 def register_object_state(object_id: int, object_type: str, show_on_states: str | list[str] | None) -> None:
@@ -101,7 +102,7 @@ def handle() -> None:
         case "_paused":
             # Draw the frame like normal
             display.draw_background()
-            display.draw_objects(update_sprites=False)
+            display.draw_objects()
 
             # Blur the screen
             display.blur()
@@ -110,6 +111,7 @@ def handle() -> None:
             input_handler.draw_specifically(objects.RESUME_GAME_BUTTON)
             text_handler.draw_specifically(objects.PAUSED_GAME_MENU_TEXT)
         case "_menu":
-            pass
+            display.draw_solid_background(constants.MAIN_MENU_BACKGROUND_COLOUR)
+            display.draw_objects(draw_player=False)
         case _:
             raise ValueError(f"current_state is an unknown value: {current_state}")
