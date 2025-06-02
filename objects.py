@@ -2,15 +2,28 @@
 if __name__ == "__main__":
     raise RuntimeError(f"The {__file__.split('\\')[-1][:-3]} module should not be run on its own. Please run main.py instead")
 
+import random
 import constants
+import state
+import handlers
 import state_handler
 import input_handler
 import text_handler
 import sprite_handler
 
-# Button functions. No docstrings for these
+# Object functions. No docstrings for these
 def _resume_game() -> None:
     state_handler.current_state = state_handler.PLAYING
+
+def _egg_collision() -> None:
+    # First, move the egg back
+    sprite_handler.set_sprite_position(EGG_SPRITE, (constants.WINDOW_WIDTH - random.randint(0, constants.ITEM_RESPAWN_VARIANCE),
+                                                    constants.GROUND_Y - constants.EGG_SIZE))
+    
+    if state.player_lives > 1:
+        state.player_lives -= 1
+        return
+    handlers.handle_death() 
 
 RESUME_GAME_BUTTON = input_handler.register_button((constants.WINDOW_WIDTH/2,
                                                    130,
@@ -51,7 +64,7 @@ POWER_UP_SPRITE = sprite_handler.register_sprite((0, 0, constants.POWER_UP_SIZE,
 EGG_SPRITE = sprite_handler.register_sprite((0, constants.GROUND_Y, constants.EGG_SIZE, constants.EGG_SIZE),
                                             ["graphics/egg/egg_1.png", "graphics/egg/egg_2.png"],
                                              True,
-                                             None)
+                                             _egg_collision)
 
 
 def register_objects_states() -> None:

@@ -41,7 +41,7 @@ def handle_events() -> None:
                 # Handle restarting the game
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                     state.player_is_alive = True
-                    assets.egg_rectangle.left = constants.WINDOW_WIDTH
+                    sprite_handler.set_sprite_position(objects.EGG_SPRITE, (0, 0))
                     state_handler.current_state = state_handler.PLAYING
             case state_handler.PAUSED:
                 # Handle unpausing
@@ -118,6 +118,10 @@ def handle_power_up_roll() -> None:
 
 def handle_death() -> None:
     """Called when the player dies. Handles the resetting of state variables and leaderboard"""
+    # Destroy all objects that shouldn't be there
+    sprite_handler.set_sprite_status(objects.POWER_UP_SPRITE, False)
+    state.current_power_up = None
+    
     # Handle the leaderboard
     leaderboard = open("leaderboard.txt", "r")
     # Read the current records
