@@ -44,12 +44,7 @@ def draw_objects(update_sprites: bool=True) -> None:
     
     Args:
         update_sprites (bool): True to update animations, False to not. Default True
-    """
-    # Draw the egg
-    if update_sprites:
-        assets.update_egg_sprite()
-    assets.screen.blit(assets.egg_surface, assets.egg_rectangle)
-    
+    """    
     # Draw the player
     assets.screen.blit(assets.player_surface, assets.player_rectangle)
 

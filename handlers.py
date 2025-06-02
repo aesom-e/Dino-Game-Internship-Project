@@ -70,10 +70,11 @@ def handle_frame_counters() -> None:
 
 def handle_moving_objects() -> None:
     """Handles the movement of objects like the egg and power-ups"""
-    # Handle the movement of an egg
-    assets.egg_rectangle.x -= state.item_speed
-    if assets.egg_rectangle.right <= 0:
-        assets.egg_rectangle.left = constants.WINDOW_WIDTH - random.randint(0, constants.ITEM_RESPAWN_VARIANCE)
+    # Handle the movement of the egg
+    sprite_handler.move_sprite(objects.EGG_SPRITE, (-state.item_speed, 0))
+    if sprite_handler.get_sprite_position(objects.EGG_SPRITE)[0] <= 0:
+        sprite_handler.set_sprite_position(objects.EGG_SPRITE, (constants.WINDOW_WIDTH - random.randint(0, constants.ITEM_RESPAWN_VARIANCE),
+                                                                constants.GROUND_Y - constants.EGG_SIZE))
         if state.item_speed < constants.ITEM_SPEED_CAP:
             state.item_speed += 1 # Increase the egg speed each loop to make the game harder
     
@@ -93,16 +94,6 @@ def handle_player_movement() -> None:
         # Handle the player hitting the ground
         assets.player_rectangle.bottom = constants.GROUND_Y
         state.double_jumped = False
-
-def handle_collisions() -> None:
-    """Self-explanatory. I think most of these don't even need docstrings"""
-    if assets.egg_rectangle.colliderect(assets.player_rectangle):
-        if not state.god_mode_frames:
-            state.player_lives -= 1
-        # Reset the egg position to avoid multiple collisions
-        assets.egg_rectangle.left = constants.WINDOW_WIDTH - random.randint(0, constants.ITEM_RESPAWN_VARIANCE)
-        if not state.player_lives:
-            handle_death()
 
 def handle_power_up_roll() -> None:
     """Handle the rolling for a power-up"""

@@ -24,10 +24,6 @@ player_rectangle  = player_surface.get_rect(bottomleft=(25, constants.GROUND_Y))
 player_animations = {"walk_1": pygame.image.load("graphics/player/player_walk_1.png").convert_alpha(),
                      "walk_2": pygame.image.load("graphics/player/player_walk_2.png").convert_alpha(),
                      "jump":   pygame.image.load("graphics/player/player_jump.png").convert_alpha()}
-egg_surface       = pygame.image.load("graphics/egg/egg_1.png").convert_alpha()
-egg_rectangle     = egg_surface.get_rect(bottomleft=(constants.WINDOW_WIDTH, constants.GROUND_Y))
-egg_animations    = {"1": pygame.image.load("graphics/egg/egg_1.png").convert_alpha(),
-                    "2": pygame.image.load("graphics/egg/egg_2.png").convert_alpha()}
 
 def update_player_sprite() -> None:
     """Updates the player's sprite. Called each frame"""
@@ -40,31 +36,14 @@ def update_player_sprite() -> None:
     match state.player_animation:
         case "walk_1":
             state.player_walk_frames += 1
-            if state.player_walk_frames == constants.WALK_ANIMATION_DELAY:
+            if state.player_walk_frames == constants.FPS_CAP / constants.ANIMATION_FPS:
                 state.player_walk_frames = 0
                 state.player_animation = "walk_2"
         case "walk_2":
             state.player_walk_frames += 1
-            if state.player_walk_frames == constants.WALK_ANIMATION_DELAY:
+            if state.player_walk_frames == constants.FPS_CAP / constants.ANIMATION_FPS:
                 state.player_walk_frames = 0
                 state.player_animation = "walk_1"
     
     global player_surface, player_animations
     player_surface = player_animations[state.player_animation]
-
-def update_egg_sprite() -> None:
-    """Updates the egg's sprite. Called each frame"""
-    match state.egg_animation:
-        case "1":
-            state.egg_walk_frames += 1
-            if state.egg_walk_frames == constants.WALK_ANIMATION_DELAY:
-                state.egg_walk_frames = 0
-                state.egg_animation = "2"
-        case "2":
-            state.egg_walk_frames += 1
-            if state.egg_walk_frames == constants.WALK_ANIMATION_DELAY:
-                state.egg_walk_frames = 0
-                state.egg_animation = "1"
-    
-    global egg_surface, egg_animations
-    egg_surface = egg_animations[state.egg_animation]

@@ -48,6 +48,11 @@ POWER_UP_SPRITE = sprite_handler.register_sprite((0, 0, constants.POWER_UP_SIZE,
                                                  True,
                                                  None)
 
+EGG_SPRITE = sprite_handler.register_sprite((0, constants.GROUND_Y, constants.EGG_SIZE, constants.EGG_SIZE),
+                                            ["graphics/egg/egg_1.png", "graphics/egg/egg_2.png"],
+                                             True,
+                                             None)
+
 
 def register_objects_states() -> None:
     """Registers the objects with the state handler. Needs to be in a function or python complains"""
@@ -56,3 +61,4 @@ def register_objects_states() -> None:
     state_handler.register_object_state(SCORE_TEXT, "text", state_handler.PLAYING)
     state_handler.register_object_state(GAME_OVER_TEXT, "text", state_handler.DEAD)
     state_handler.register_object_state(GAME_OVER_SCORE_TEXT, "text", state_handler.DEAD)
+    state_handler.register_object_state(EGG_SPRITE, "sprite", state_handler.PLAYING)

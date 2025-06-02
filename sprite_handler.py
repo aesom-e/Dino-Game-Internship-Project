@@ -4,6 +4,7 @@ if __name__ == "__main__":
 
 from collections.abc import Callable
 import pygame
+import constants
 import assets
 import rectangle
 
@@ -146,6 +147,18 @@ def get_sprite_position(sprite_id: int) -> tuple[float, float]:
     """
     return (_sprites[sprite_id][0][0], _sprites[sprite_id][0][1])
 
+def set_sprite_position(sprite_id: int, position: tuple[float, float]) -> None:
+    """Sets the specified sprite's position
+    
+    Args:
+        sprite_id (int): The ID of the sprite to modify
+        position (tuple[float, float]): The new position as x, y
+    """
+    _sprites[sprite_id][0] = (position[0],
+                              position[1],
+                              _sprites[sprite_id][0][2],
+                              _sprites[sprite_id][0][3])
+
 def set_sprite_status(sprite_id: int, active: bool) -> None:
     """Sets the status of a single sprite
     
@@ -162,12 +175,12 @@ def draw_sprites() -> None:
         if active:
             # Check if the image is a list; then process accordingly
             if isinstance(image, list):
-                assets.screen.blit(image[frame], rectangle)
+                assets.screen.blit(image[int(frame / (constants.FPS_CAP/constants.ANIMATION_FPS))], rectangle)
                 
                 # Increment the frame counter
-                _sprites[6] += 1
-                if _sprites[6] >= len(image):
-                    _sprites[6] = 0
+                _sprites[_][6] += 1
+                if _sprites[_][6] >= len(image) * (constants.FPS_CAP / constants.ANIMATION_FPS):
+                    _sprites[_][6] = 0
             else:
                 assets.screen.blit(image, rectangle)
 

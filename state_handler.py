@@ -36,6 +36,8 @@ def register_object_state(object_id: int, object_type: str, show_on_states: str 
             object_status_function = input_handler.set_button_status
         case "text":
             object_status_function = text_handler.set_text_status
+        case "sprite":
+            object_status_function = sprite_handler.set_sprite_status
         case _:
             raise ValueError(f"Unknown object type: {object_type}")
     
@@ -91,7 +93,6 @@ def handle() -> None:
             display.draw_objects()
 
             # Handle collisions
-            handlers.handle_collisions()
             sprite_handler.handle_collisions()
         case "_dead":
             # Draw the frame
