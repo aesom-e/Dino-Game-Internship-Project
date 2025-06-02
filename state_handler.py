@@ -96,8 +96,8 @@ def handle() -> None:
             sprite_handler.handle_collisions()
         case "_dead":
             # Draw the frame
-            display.update_death_screen()
             display.draw_objects()
+            display.draw_leaderboard()
         case "_paused":
             # Draw the frame like normal
             display.draw_background()

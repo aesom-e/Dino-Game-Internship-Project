@@ -25,20 +25,6 @@ def draw_background() -> None:
         heart_rectangle = (_*constants.HEART_SIZE, 0)
         assets.screen.blit(assets.HEART_SURFACE, heart_rectangle)
 
-def update_death_screen() -> None:
-    """Updates the objects associated with the death screen"""
-    # Update the player's score
-    #text_handler.modify_text(objects.GAME_OVER_SCORE_TEXT, text=f"Your Score: {state.score_on_death}")
-    
-    # Draw the leaderboard
-    """assets.screen.blit(assets.LEADERBOARD_TEXT, assets.LEADERBOARD_TEXT_RECTANGLE)
-    with open("leaderboard.txt", "r") as f:
-        records = sorted([int(_) for _ in f.read().split('\n') if _], reverse=True)
-    for _, record in enumerate(records):
-        record_text = assets.SMALL_FONT.render(str(record), True, constants.LEADERBOARD_TEXT_COLOUR)
-        record_text_rectangle = record_text.get_rect(center=(600, 30*_+80))
-        assets.screen.blit(record_text, record_text_rectangle)"""
-
 def draw_objects(update_sprites: bool=True) -> None:
     """Draw the objects on screen
     
@@ -57,6 +43,17 @@ def draw_frame_to_screen() -> None:
     """Draws the frame in the frame buffer onto the screen and performs other tasks for the new frame"""
     pygame.display.flip()
     assets.clock.tick(constants.FPS_CAP)
+
+def draw_leaderboard() -> None:
+    """Draws the leaderboard text"""
+    with open("leaderboard.txt", "r") as f:
+        records = sorted([int(_) for _ in f.read().split('\n') if _], reverse=True)
+    
+    # This doesn't use the text handler for pure simplicity
+    for _, record in enumerate(records):
+        record_text = assets.SMALL_FONT.render(f"#{_+1} {record}", True, constants.LEADERBOARD_TEXT_COLOUR)
+        record_text_rectangle = record_text.get_rect(center=(600, 30*_+80))
+        assets.screen.blit(record_text, record_text_rectangle)
 
 def blur() -> None:
     """Blurs the screen"""

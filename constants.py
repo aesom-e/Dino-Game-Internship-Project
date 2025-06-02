@@ -22,4 +22,4 @@ POWER_UP_SIZE               = 50
 EGG_SIZE                    = 50
 POWER_UP_CHANCE             = 300          # There is a 1/POWER_UP_CHANCE each frame for a powerup to spawn
 BLUR_POWER                  = 2.5
-LEADERBOARD_TEXT_COLOUR     = 0x0373FCFF
+LEADERBOARD_TEXT_COLOUR     = (0x03, 0x73, 0xFC)

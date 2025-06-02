@@ -56,6 +56,11 @@ GAME_OVER_SCORE_TEXT = text_handler.register_text((200, constants.WINDOW_HEIGHT/
                                                   constants.SMALL_FONT_SIZE,
                                                   "Your Score: 0")
 
+LEADERBOARD_TEXT = text_handler.register_text((600, 50),
+                                              constants.LEADERBOARD_TEXT_COLOUR,
+                                              constants.SMALL_FONT_SIZE,
+                                              "High Scores")
+
 POWER_UP_SPRITE = sprite_handler.register_sprite((0, 0, constants.POWER_UP_SIZE, constants.POWER_UP_SIZE),
                                                  "graphics/powerups/god_mode.png",
                                                  True,
@@ -72,6 +77,7 @@ def register_objects_states() -> None:
     state_handler.register_object_state(RESUME_GAME_BUTTON, "button", state_handler.PAUSED)
     state_handler.register_object_state(PAUSED_GAME_MENU_TEXT, "text", state_handler.PAUSED)
     state_handler.register_object_state(SCORE_TEXT, "text", state_handler.PLAYING)
+    state_handler.register_object_state(EGG_SPRITE, "sprite", [state_handler.PLAYING, state_handler.PAUSED])
     state_handler.register_object_state(GAME_OVER_TEXT, "text", state_handler.DEAD)
     state_handler.register_object_state(GAME_OVER_SCORE_TEXT, "text", state_handler.DEAD)
-    state_handler.register_object_state(EGG_SPRITE, "sprite", state_handler.PLAYING)
+    state_handler.register_object_state(LEADERBOARD_TEXT, "text", state_handler.DEAD)
