@@ -28,7 +28,6 @@ egg_surface       = pygame.image.load("graphics/egg/egg_1.png").convert_alpha()
 egg_rectangle     = egg_surface.get_rect(bottomleft=(constants.WINDOW_WIDTH, constants.GROUND_Y))
 egg_animations    = {"1": pygame.image.load("graphics/egg/egg_1.png").convert_alpha(),
                     "2": pygame.image.load("graphics/egg/egg_2.png").convert_alpha()}
-power_up_rectangle  = None
 
 def update_player_sprite() -> None:
     """Updates the player's sprite. Called each frame"""

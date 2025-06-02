@@ -9,6 +9,7 @@ import handlers
 import display
 import input_handler
 import text_handler
+import sprite_handler
 import objects
 
 # Used so that code can be written like state_handler.current_state = state_handler.DEAD
@@ -84,13 +85,14 @@ def handle() -> None:
             handlers.handle_moving_objects()
             handlers.handle_player_movement()
             handlers.handle_power_up_roll()
-            handlers.handle_collisions()
 
             # Draw the frame
             display.draw_background()
             display.draw_objects()
 
+            # Handle collisions
             handlers.handle_collisions()
+            sprite_handler.handle_collisions()
         case "_dead":
             # Draw the frame
             display.update_death_screen()

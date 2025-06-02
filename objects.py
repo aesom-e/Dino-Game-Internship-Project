@@ -43,6 +43,11 @@ GAME_OVER_SCORE_TEXT = text_handler.register_text((200, constants.WINDOW_HEIGHT/
                                                   constants.SMALL_FONT_SIZE,
                                                   "Your Score: 0")
 
+POWER_UP_SPRITE = sprite_handler.register_sprite((0, 0, constants.POWER_UP_SIZE, constants.POWER_UP_SIZE),
+                                                 "graphics/powerups/god_mode.png",
+                                                 True,
+                                                 None)
+
 
 def register_objects_states() -> None:
     """Registers the objects with the state handler. Needs to be in a function or python complains"""

@@ -11,6 +11,7 @@ import random
 import state_handler
 import input_handler
 import text_handler
+import sprite_handler
 import objects
 
 def handle_events() -> None:
@@ -77,11 +78,11 @@ def handle_moving_objects() -> None:
             state.item_speed += 1 # Increase the egg speed each loop to make the game harder
     
     # Handle the movement of the power-ups
-    if assets.power_up_rectangle is not None:
-        assets.power_up_rectangle.x -= state.item_speed
-        if assets.power_up_rectangle.right <= 0:
+    if state.current_power_up is not None:
+        sprite_handler.move_sprite(objects.POWER_UP_SPRITE, (-state.item_speed, 0))
+        if sprite_handler.get_sprite_position(objects.POWER_UP_SPRITE)[0] <= 0:
+            sprite_handler.set_sprite_status(objects.POWER_UP_SPRITE, False)
             state.current_power_up = None
-            assets.power_up_rectangle = None
 
 def handle_player_movement() -> None:
     """Handle the player's movement"""
@@ -102,11 +103,6 @@ def handle_collisions() -> None:
         assets.egg_rectangle.left = constants.WINDOW_WIDTH - random.randint(0, constants.ITEM_RESPAWN_VARIANCE)
         if not state.player_lives:
             handle_death()
-    if assets.power_up_rectangle is not None and assets.power_up_rectangle.colliderect(assets.player_rectangle) and state.current_power_up:
-        # Trigger the powerup then delete it
-        state.current_power_up[1]()
-        state.current_power_up = None
-        assets.power_up_rectangle = None
 
 def handle_power_up_roll() -> None:
     """Handle the rolling for a power-up"""
@@ -118,14 +114,16 @@ def handle_power_up_roll() -> None:
             if state.current_power_up == power_ups.table[0] and state.player_lives == constants.MAX_LIVES:
                 state.current_power_up = power_ups.table[random.randint(1, len(power_ups.table)-1)]
 
-            rectangle_position = (constants.WINDOW_WIDTH - random.randint(0, constants.ITEM_RESPAWN_VARIANCE), constants.GROUND_Y)
-            assets.power_up_rectangle = state.current_power_up[0].get_rect(bottomleft=rectangle_position)
+            rectangle_position = (constants.WINDOW_WIDTH - random.randint(0, constants.ITEM_RESPAWN_VARIANCE) + constants.POWER_UP_SIZE,
+                                  constants.GROUND_Y - constants.POWER_UP_SIZE)
             
-            # Ensure the egg won't collide with the rectangle
-            if assets.egg_rectangle.colliderect(assets.power_up_rectangle):
-                state.current_power_up = None
-            else: 
-                assets.screen.blit(state.current_power_up[0], assets.power_up_rectangle)
+            # Modift the power up object and spawn it
+            sprite_handler.modify_sprite(objects.POWER_UP_SPRITE, sprite_rectangle=(rectangle_position[0], rectangle_position[1],
+                                                                                    constants.POWER_UP_SIZE, constants.POWER_UP_SIZE),
+                                                                  image_path=state.current_power_up[0],
+                                                                  transparent=True,
+                                                                  on_collision=state.current_power_up[1])
+            sprite_handler.set_sprite_status(objects.POWER_UP_SPRITE, True)
 
 def handle_death() -> None:
     """Called when the player dies. Handles the resetting of state variables and leaderboard"""

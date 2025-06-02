@@ -8,6 +8,7 @@ import assets
 import state
 import input_handler
 import text_handler
+import sprite_handler
 import objects
 
 def wipe() -> None:
@@ -52,14 +53,10 @@ def draw_objects(update_sprites: bool=True) -> None:
     # Draw the player
     assets.screen.blit(assets.player_surface, assets.player_rectangle)
 
-    # Draw the power-up
-    if state.current_power_up is not None:
-        if assets.power_up_rectangle.right > 0:
-            assets.screen.blit(state.current_power_up[0], assets.power_up_rectangle)
-
     # Draw the objects registered with the different handlers
     input_handler.draw_buttons()
     text_handler.draw_text_objects()
+    sprite_handler.draw_sprites()
 
 def draw_frame_to_screen() -> None:
     """Draws the frame in the frame buffer onto the screen and performs other tasks for the new frame"""
