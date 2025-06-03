@@ -78,6 +78,16 @@ def handle_moving_objects() -> None:
         if state.item_speed < constants.ITEM_SPEED_CAP:
             state.item_speed += 1 # Increase the egg speed each loop to make the game harder
     
+    # Handle the movement of the chicken
+    if state.score > constants.CHICKEN_SPAWN_SCORE:
+        sprite_handler.set_sprite_status(objects.CHICKEN_SPRITE, True)
+        sprite_handler.move_sprite(objects.CHICKEN_SPRITE, (-state.item_speed*1.5, 0))
+        if sprite_handler.get_sprite_position(objects.CHICKEN_SPRITE)[0] <= 0:
+            sprite_handler.set_sprite_position(objects.CHICKEN_SPRITE, (constants.WINDOW_WIDTH - random.randint(0, constants.ITEM_RESPAWN_VARIANCE),
+                                                                        constants.GROUND_Y - constants.CHICKEN_SIZE - constants.CHICKEN_HEIGHT))
+    else:
+        sprite_handler.set_sprite_status(objects.CHICKEN_SPRITE, False)
+
     # Handle the movement of the power-ups
     if state.current_power_up is not None:
         sprite_handler.move_sprite(objects.POWER_UP_SPRITE, (-state.item_speed, 0))
@@ -121,6 +131,7 @@ def handle_death() -> None:
     # Destroy all objects that shouldn't be there
     sprite_handler.set_sprite_status(objects.POWER_UP_SPRITE, False)
     state.current_power_up = None
+    sprite_handler.set_sprite_status(objects.CHICKEN_SPRITE, False)
     
     # Update the score display
     text_handler.modify_text(objects.GAME_OVER_SCORE_TEXT, text=f"Your Score: {state.score}")
@@ -148,10 +159,22 @@ def handle_death() -> None:
     leaderboard.close()
 
     # Reset state variables
+    reset_state()
+
+    # Set the game state
+    state_handler.current_state = state_handler.DEAD
+
+def reset_state() -> None:
+    """Resets all the state variables"""
     state.player_is_alive = False
     state.score = 0
     state.item_speed = 5
     state.player_lives = constants.PLAYER_SPAWN_LIVES
-
-    # Set the game state
-    state_handler.current_state = state_handler.DEAD
+    state.player_y_speed = 0
+    state.double_jumped = False
+    assets.player_rectangle = assets.player_surface.get_rect(bottomleft=(25, constants.GROUND_Y))
+    sprite_handler.set_sprite_position(objects.EGG_SPRITE, (0, 0))
+    state.god_mode_frames = 0
+    state.double_score_frames = 0
+    sprite_handler.set_sprite_status(objects.POWER_UP_SPRITE, False)
+    state.current_power_up = False

@@ -108,8 +108,9 @@ def handle() -> None:
             display.blur()
 
             # Draw the menu objects after the blur
-            input_handler.draw_specifically(objects.RESUME_GAME_BUTTON)
             text_handler.draw_specifically(objects.PAUSED_GAME_MENU_TEXT)
+            input_handler.draw_specifically(objects.RESUME_GAME_BUTTON)
+            input_handler.draw_specifically(objects.PAUSE_MAIN_MENU_BUTTON)
         case "_menu":
             display.draw_solid_background(constants.MAIN_MENU_BACKGROUND_COLOUR)
             display.draw_objects(draw_player=False)
