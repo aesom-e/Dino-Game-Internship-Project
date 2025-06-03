@@ -26,4 +26,4 @@ CHICKEN_SPAWN_SCORE         = 1000
 POWER_UP_CHANCE             = 300           # There is a 1/POWER_UP_CHANCE each frame for a powerup to spawn
 BLUR_POWER                  = 2.5
 LEADERBOARD_TEXT_COLOUR     = (3, 115, 252)
-MAIN_MENU_BACKGROUND_COLOUR = (110, 235, 33)
+MAIN_MENU_BACKGROUND_COLOUR = (37, 93, 184)

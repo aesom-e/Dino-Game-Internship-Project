@@ -127,12 +127,7 @@ def handle_power_up_roll() -> None:
             sprite_handler.set_sprite_status(objects.POWER_UP_SPRITE, True)
 
 def handle_death() -> None:
-    """Called when the player dies. Handles the resetting of state variables and leaderboard"""
-    # Destroy all objects that shouldn't be there
-    sprite_handler.set_sprite_status(objects.POWER_UP_SPRITE, False)
-    state.current_power_up = None
-    sprite_handler.set_sprite_status(objects.CHICKEN_SPRITE, False)
-    
+    """Called when the player dies. Handles the resetting of state variables and leaderboard"""    
     # Update the score display
     text_handler.modify_text(objects.GAME_OVER_SCORE_TEXT, text=f"Your Score: {state.score}")
 
@@ -165,7 +160,13 @@ def handle_death() -> None:
     state_handler.current_state = state_handler.DEAD
 
 def reset_state() -> None:
-    """Resets all the state variables"""
+    """Resets all the state variables and destroy temporary objects"""
+    # Destroy temporary objects
+    sprite_handler.set_sprite_status(objects.POWER_UP_SPRITE, False)
+    state.current_power_up = None
+    sprite_handler.set_sprite_status(objects.CHICKEN_SPRITE, False)
+
+    # Reset state
     state.player_is_alive = False
     state.score = 0
     state.item_speed = 5
@@ -174,6 +175,7 @@ def reset_state() -> None:
     state.double_jumped = False
     assets.player_rectangle = assets.player_surface.get_rect(bottomleft=(25, constants.GROUND_Y))
     sprite_handler.set_sprite_position(objects.EGG_SPRITE, (0, 0))
+    sprite_handler.set_sprite_position(objects.CHICKEN_SPRITE, (0, 0))
     state.god_mode_frames = 0
     state.double_score_frames = 0
     sprite_handler.set_sprite_status(objects.POWER_UP_SPRITE, False)
