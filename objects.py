@@ -7,16 +7,17 @@ import pygame
 import random
 import constants
 import state
-import assets
 import handlers
 import state_handler
 import input_handler
 import text_handler
 import sprite_handler
+import sound
 
 # Object functions. No docstrings for these
 def _resume_game() -> None:
     state_handler.current_state = state_handler.PLAYING
+    sound.music.play()
 
 def _main_menu() -> None:
     # Reset all state
@@ -58,6 +59,7 @@ def _chicken_collision() -> None:
 
 def _play_game() -> None:
     state_handler.current_state = state_handler.PLAYING
+    #sound.music.set("music.wav")
 
 def _quit_game() -> NoReturn:
     pygame.quit()
