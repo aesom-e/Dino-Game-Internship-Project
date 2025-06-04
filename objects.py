@@ -65,7 +65,7 @@ def _quit_game() -> NoReturn:
 
 RESUME_GAME_BUTTON = input_handler.register_button((constants.WINDOW_WIDTH/2,
                                                    90,
-                                                   220,
+                                                   None,
                                                    constants.MENU_FONT_SIZE,
                                                    "centered"),
                                                   (0, 0, 0),
@@ -82,7 +82,7 @@ PAUSED_GAME_MENU_TEXT = text_handler.register_text((constants.WINDOW_WIDTH/2, 50
 
 PAUSE_MAIN_MENU_BUTTON = input_handler.register_button((constants.WINDOW_WIDTH/2,
                                                        130,
-                                                       220,
+                                                       None,
                                                        constants.MENU_FONT_SIZE,
                                                        "centered"),
                                                        (0, 0, 0),
@@ -109,7 +109,7 @@ GAME_OVER_SCORE_TEXT = text_handler.register_text((200, constants.WINDOW_HEIGHT/
 
 PLAY_AGAIN_BUTTON = input_handler.register_button((200,
                                                    constants.WINDOW_HEIGHT/2+50,
-                                                   130,
+                                                   None,
                                                    constants.SMALL_FONT_SIZE,
                                                    "centered"),
                                                   (255, 255, 255),
@@ -121,7 +121,7 @@ PLAY_AGAIN_BUTTON = input_handler.register_button((200,
 
 DEATH_MAIN_MENU_BUTTON = input_handler.register_button((200,
                                                         constants.WINDOW_HEIGHT/2+90,
-                                                        130,
+                                                        None,
                                                         constants.SMALL_FONT_SIZE,
                                                         "centered"),
                                                        (255, 255, 255),
@@ -156,7 +156,7 @@ MAIN_MENU_TITLE = text_handler.register_text((400, 50),
                                              constants.MENU_TITLE_FONT_SIZE,
                                              constants.WINDOW_TITLE)
 
-MENU_PLAY_BUTTON = input_handler.register_button((400, 300, 60, constants.MENU_FONT_SIZE, "centered"),
+MENU_PLAY_BUTTON = input_handler.register_button((400, 300, None, constants.MENU_FONT_SIZE, "centered"),
                                                  (0, 0, 0),
                                                  (180, 120, 20),
                                                  None,
@@ -165,13 +165,21 @@ MENU_PLAY_BUTTON = input_handler.register_button((400, 300, 60, constants.MENU_F
                                                  _play_game)
 
 
-MENU_QUIT_BUTTON = input_handler.register_button((400, 340, 60, constants.MENU_FONT_SIZE, "centered"),
+MENU_QUIT_BUTTON = input_handler.register_button((400, 340, None, constants.MENU_FONT_SIZE, "centered"),
                                                  (0, 0, 0),
                                                  (30, 30, 120),
                                                  None,
                                                  constants.MENU_FONT_SIZE,
                                                  "Quit",
                                                  _quit_game)
+
+MENU_HOW_TO_BUTTON = input_handler.register_button((400, 260, None, constants.MENU_FONT_SIZE, "centered"),
+                                                   (0, 0, 0),
+                                                   (30, 120, 30),
+                                                   None,
+                                                   constants.MENU_FONT_SIZE,
+                                                   "How To Play",
+                                                   None)
 
 def register_objects_states() -> None:
     """Registers the objects with the state handler. Needs to be in a function or python complains"""
@@ -185,3 +193,4 @@ def register_objects_states() -> None:
     state_handler.register_object_state(MAIN_MENU_TITLE, "text", state_handler.MENU)
     state_handler.register_object_state(MENU_PLAY_BUTTON, "button", state_handler.MENU)
     state_handler.register_object_state(MENU_QUIT_BUTTON, "button", state_handler.MENU)
+    state_handler.register_object_state(MENU_HOW_TO_BUTTON, "button", state_handler.MENU)

@@ -31,7 +31,7 @@ import rectangle
 _buttons = []
 _drawn_this_frame = [] # For buttons drawn this frame
 
-def register_button(button_rectangle: tuple[float, float, float, float, str | None],
+def register_button(button_rectangle: tuple[float, float, float | None, float, str | None],
                     text_colour: tuple[int, int, int],
                     hover_colour: tuple[int, int, int] | None,
                     background_colour: tuple[int, int, int] | None,
@@ -41,7 +41,7 @@ def register_button(button_rectangle: tuple[float, float, float, float, str | No
     """Registers a button with the input handler
     
     Args:
-        button_rectangle (tuple[float, float, float, float, str | None]): The button's rectangle
+        button_rectangle (tuple[float, float, float, float, str | None]): The button's rectangle. Set width to None to auto calculate
         text_colour (tuple[int, int, int]): The colour of the button's text
         hover_colour (tuple[int, int, int] | None): The colour of the button's text when the mouse is hovering on it.
                                                     None to not have a hover effect
@@ -56,7 +56,16 @@ def register_button(button_rectangle: tuple[float, float, float, float, str | No
     # Construct the font now to save time rendering
     font = pygame.font.Font(pygame.font.get_default_font(), font_size)
 
-    _buttons.append([rectangle.get_rectangle(button_rectangle),
+    # Check if the width field is None, and calculate the button's width
+    if button_rectangle[2] is None:
+        text_rectangle = font.render(text, True, 0).get_rect()
+        if len(button_rectangle) == 4:
+            true_rectangle = (button_rectangle[0], button_rectangle[1], text_rectangle[2], button_rectangle[3])
+        else:
+            true_rectangle = (button_rectangle[0], button_rectangle[1], text_rectangle[2], button_rectangle[3], button_rectangle[4])
+    else: true_rectangle = button_rectangle    
+
+    _buttons.append([rectangle.get_rectangle(true_rectangle),
                      text_colour,
                      hover_colour,
                      background_colour,
@@ -67,7 +76,7 @@ def register_button(button_rectangle: tuple[float, float, float, float, str | No
     return len(_buttons)-1
 
 def modify_button(button_id: int,
-                  button_rectangle: tuple[float, float, float, float, str | None] = None,
+                  button_rectangle: tuple[float, float, float | None, float, str | None] = None,
                   text_colour: tuple[int, int, int] = None,
                   hover_colour: tuple[int, int, int] | None = False,
                   background_colour: tuple[int, int, int] | None = False,
@@ -86,8 +95,18 @@ def modify_button(button_id: int,
         text (str): The new text; leave blank to not modify
         on_click (Callable[[None], None]): The new function to call on click; leave blank to not modify
     """
-    if rectangle is not None:
-        _buttons[button_id][0] = rectangle.get_rectangle(button_rectangle)
+    if button_rectangle is not None:
+        # Check if width is None and calculate it
+        if button_rectangle[2] is None:
+            new_button_rectangle = (_buttons[button_id][4] if font_size is None else pygame.font.Font(pygame.font.get_default_font(), font_size)) \
+                                    .render((_buttons[button_id][5] if text is None else text), True, 0).get_rect()
+            if len(button_rectangle) == 4:
+                true_rectangle = (button_rectangle[0], button_rectangle[1], new_button_rectangle[2], button_rectangle[3])
+            else:
+                true_rectangle = (button_rectangle[0], button_rectangle[1], new_button_rectangle[2], button_rectangle[3], button_rectangle[4])
+        else: true_rectangle = button_rectangle
+
+        _buttons[button_id][0] = rectangle.get_rectangle(true_rectangle)
     if text_colour is not None:
         _buttons[button_id][1] = text_colour
     if hover_colour is not False:
