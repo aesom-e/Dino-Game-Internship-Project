@@ -46,6 +46,10 @@ def _chicken_collision() -> None:
     sprite_handler.set_sprite_position(CHICKEN_SPRITE, (constants.WINDOW_WIDTH - random.randint(0, constants.ITEM_RESPAWN_VARIANCE),
                                                         constants.GROUND_Y - constants.CHICKEN_SIZE - constants.CHICKEN_HEIGHT))
 
+    # Create a delay before the chicken spawns again
+    state.chicken_spawn_delay = random.randint(30, 90)
+    sprite_handler.set_sprite_status(CHICKEN_SPRITE, False)
+
     # Handle the player lives
     if state.player_lives > 1:
         state.player_lives -= 1

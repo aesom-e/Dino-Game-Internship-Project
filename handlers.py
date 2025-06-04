@@ -79,14 +79,18 @@ def handle_moving_objects() -> None:
             state.item_speed += 1 # Increase the egg speed each loop to make the game harder
     
     # Handle the movement of the chicken
-    if state.score > constants.CHICKEN_SPAWN_SCORE:
+    if state.score > constants.CHICKEN_SPAWN_SCORE and not state.chicken_spawn_delay:
         sprite_handler.set_sprite_status(objects.CHICKEN_SPRITE, True)
-        sprite_handler.move_sprite(objects.CHICKEN_SPRITE, (-state.item_speed*1.5, 0))
+        sprite_handler.move_sprite(objects.CHICKEN_SPRITE, (-state.item_speed*0.75, 0))
         if sprite_handler.get_sprite_position(objects.CHICKEN_SPRITE)[0] <= 0:
             sprite_handler.set_sprite_position(objects.CHICKEN_SPRITE, (constants.WINDOW_WIDTH - random.randint(0, constants.ITEM_RESPAWN_VARIANCE),
                                                                         constants.GROUND_Y - constants.CHICKEN_SIZE - constants.CHICKEN_HEIGHT))
+            # Create a delay before the chicken spawns again
+            state.chicken_spawn_delay = random.randint(30, 90)
+            sprite_handler.set_sprite_status(objects.CHICKEN_SPRITE, False)
     else:
         sprite_handler.set_sprite_status(objects.CHICKEN_SPRITE, False)
+        if state.chicken_spawn_delay: state.chicken_spawn_delay -= 1
 
     # Handle the movement of the power-ups
     if state.current_power_up is not None:

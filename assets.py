@@ -10,7 +10,10 @@ import input_handler
 # Constant assets
 SKY_SURFACE                = pygame.image.load("graphics/level/sky.png").convert()
 GROUND_SURFACE             = pygame.image.load("graphics/level/ground.png").convert()
-HEART_SURFACE              = pygame.transform.scale(pygame.image.load("graphics/level/heart.png").convert_alpha(), (constants.HEART_SIZE, constants.HEART_SIZE))
+HEART_SURFACE              = pygame.transform.scale(pygame.image.load("graphics/level/heart.png").convert_alpha(),
+                                                    (constants.HEART_SIZE, constants.HEART_SIZE))
+GOLD_HEART_SURFACE         = pygame.transform.scale(pygame.image.load("graphics/level/heart_gold.png").convert_alpha(),
+                                                    (constants.HEART_SIZE, constants.HEART_SIZE))
 GAME_FONT                  = pygame.font.Font(pygame.font.get_default_font(), constants.DEFAULT_FONT_SIZE)
 SMALL_FONT                 = pygame.font.Font(pygame.font.get_default_font(), constants.SMALL_FONT_SIZE)
 LEADERBOARD_TEXT           = SMALL_FONT.render("Top Scores", True, 0)

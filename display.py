@@ -31,7 +31,8 @@ def draw_background() -> None:
     # Draw the hearts
     for _ in range(state.player_lives):
         heart_rectangle = (_*constants.HEART_SIZE, 0)
-        assets.screen.blit(assets.HEART_SURFACE, heart_rectangle)
+        assets.screen.blit(assets.GOLD_HEART_SURFACE if state.god_mode_frames else assets.HEART_SURFACE,
+                           heart_rectangle)
 
 def draw_objects(draw_player: bool=True) -> None:
     """Draw the objects on screen
