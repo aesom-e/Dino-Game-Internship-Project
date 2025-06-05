@@ -13,6 +13,7 @@ import input_handler
 import text_handler
 import sprite_handler
 import objects
+import sound
 
 def handle_events() -> None:
     """Handles PyGame events within the game"""
@@ -33,6 +34,7 @@ def handle_events() -> None:
                     if assets.player_rectangle.bottom < constants.GROUND_Y:
                         state.double_jumped = True
                     state.player_y_speed = constants.JUMP_GRAVITY_START_SPEED
+                    sound.play("jump.wav")
                 
                 # Handle pausing
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:

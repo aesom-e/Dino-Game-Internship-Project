@@ -7,19 +7,23 @@ import constants
 import state
 import sprite_handler
 import objects
+import sound
 
 def power_up_extra_life() -> None:
     if state.player_lives < constants.MAX_LIVES:
         state.player_lives += 1
     sprite_handler.set_sprite_status(objects.POWER_UP_SPRITE, False)
+    sound.play("powerup.wav")
 
 def power_up_god_mode() -> None:
     state.god_mode_frames += 120
     sprite_handler.set_sprite_status(objects.POWER_UP_SPRITE, False)
+    sound.play("powerup.wav")
 
 def power_up_double_score() -> None:
     state.double_score_frames += 240
     sprite_handler.set_sprite_status(objects.POWER_UP_SPRITE, False)
+    sound.play("powerup.wav")
 
 # All defined power ups
 table = [("graphics/level/heart.png", power_up_extra_life),
