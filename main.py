@@ -12,7 +12,7 @@ if __name__ == "__main__":
     objects.register_objects_states()
 
     while True:
-        # Handle pygame events
+        # Handle PyGame events
         handle_events()
         
         # Let the state handle do its job

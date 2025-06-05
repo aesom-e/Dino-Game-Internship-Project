@@ -19,7 +19,7 @@ pygame.display.set_caption(constants.WINDOW_TITLE)
 
 # This also needs to be here in the initialization.
 # We put this into assets so that they may be accessed as assets.<item> not init.<item>
-# Importing assets before the pygame display mode has been set raises pygame.error
+# Importing assets before the PyGame display mode has been set raises pygame.error
 # so we have to do it like this. I hate python
 _screen = pygame.display.set_mode((constants.WINDOW_WIDTH, constants.WINDOW_HEIGHT))
 _clock  = pygame.time.Clock()

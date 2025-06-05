@@ -18,6 +18,7 @@ PLAYING = "_playing"
 DEAD    = "_dead"
 PAUSED  = "_paused"
 MENU    = "_menu"
+HOW_TO  = "_how_to"
 
 current_state = MENU
 
@@ -67,6 +68,7 @@ def update_objects_state() -> None:
     if not current_state in _object_states.keys():
         for _object in _object_states["all"]:
             _object[1](_object[0], False)
+        return
 
 
     # Hide all objects that shouldn't be shown in the current state
@@ -112,6 +114,9 @@ def handle() -> None:
             input_handler.draw_specifically(objects.RESUME_GAME_BUTTON)
             input_handler.draw_specifically(objects.PAUSE_MAIN_MENU_BUTTON)
         case "_menu":
+            display.draw_solid_background(constants.MAIN_MENU_BACKGROUND_COLOUR)
+            display.draw_objects(draw_player=False)
+        case "_how_to":
             display.draw_solid_background(constants.MAIN_MENU_BACKGROUND_COLOUR)
             display.draw_objects(draw_player=False)
         case _:

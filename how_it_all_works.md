@@ -10,7 +10,7 @@ Everything is outsorced so main can be as tight as possible
 This contains the initialization script. It is imported once at the top of main.
 This was the best way I thought of in python to cleanly initialize.
 
-It initializes the random seed and pygame's screen and clock
+It initializes the random seed and PyGame's screen and clock
 
 ## The player
 
@@ -19,13 +19,17 @@ It has its own function for updating its animation and movement (`assets.update_
 
 ## The event handler
 
-`handlers.handle_events` handles all pygame events. It chooses what to do based on the game's current state (see the section on the state handler)
+`handlers.handle_events` handles all PyGame events. It chooses what to do based on the game's current state (see the section on the state handler)
 
 ## The state handler (state_handler.py)
 
 The state handler handles most of the code. It has a state variable which controls what part of the game is currently running. It also handles which objects are active (objects are discussed later)
 
 The majority of the game loop is run with `state_handler.handle`. It calls on a series of subhandlers to do its work for it
+
+## Sounds
+
+Sounds are handled by `sound.py` and `music.py`. They just act as wrappers for PyGame's internal music handler
 
 ## Objects
 
@@ -56,6 +60,6 @@ Some parts of the game which are rendered aren't made as objects, whether for si
 
 The player is the most important of these. It contains more specialty code than my sprite objects allow for and it wouldn't be practical to change the rest of the object code to handle those edge cases
 
-The leaderboard entries are also non-objects. It would be a bigger challenge for me to do it the "easier" way with objects than to use pygame objects
+The leaderboard entries are also non-objects. It would be a bigger challenge for me to do it the "easier" way with objects than to use PyGame objects
 
-The last thing that is just a base pygame pair of sprite and rectangle are the hearts. I figured that it would be more effort than it would be worth to create a dynamic object registration to account for changes in the max number of lives.
+The last thing that is just a base PyGame pair of sprite and rectangle are the hearts. I figured that it would be more effort than it would be worth to create a dynamic object registration to account for changes in the max number of lives.

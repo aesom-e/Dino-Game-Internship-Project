@@ -15,7 +15,7 @@ import sprite_handler
 import objects
 
 def handle_events() -> None:
-    """Handles pygame events within the game"""
+    """Handles PyGame events within the game"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit(0)
@@ -49,6 +49,10 @@ def handle_events() -> None:
                     state_handler.current_state = state_handler.PLAYING
             case state_handler.MENU:
                 pass
+            case state_handler.HOW_TO:
+                # Handle going back
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    state_handler.current_state = state_handler.MENU
             case _:
                 raise ValueError(f"Unknown current_state: {state_handler.current_state}")
 
