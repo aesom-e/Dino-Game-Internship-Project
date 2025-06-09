@@ -1,5 +1,7 @@
 """Improvement on the dino game left by the last intern
-Author: Evan Sadler
+Read how_it_all_works.md for more detail
+
+Author: @aesom-e @bassemfarid
 """
 
 import init

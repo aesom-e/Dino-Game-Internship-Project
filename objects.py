@@ -153,7 +153,10 @@ POWER_UP_SPRITE = sprite_handler.register_sprite((0, 0, constants.POWER_UP_SIZE,
                                                  None)
 
 EGG_SPRITE = sprite_handler.register_sprite((0, constants.GROUND_Y, constants.EGG_SIZE, constants.EGG_SIZE),
-                                            ["graphics/enemies/egg_1.png", "graphics/enemies/egg_2.png"],
+                                            ["graphics/enemies/tweaking_egg_1.png",
+                                             "graphics/enemies/tweaking_egg_2.png",
+                                             "graphics/enemies/tweaking_egg_3.png",
+                                             "graphics/enemies/tweaking_egg_4.png"],
                                             True,
                                             _egg_collision)
 
