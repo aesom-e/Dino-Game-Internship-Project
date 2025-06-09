@@ -1,4 +1,6 @@
-"""Dino Game"""
+"""Improvement on the dino game left by the last intern
+Author: Evan Sadler
+"""
 
 import init
 from handlers import handle_events

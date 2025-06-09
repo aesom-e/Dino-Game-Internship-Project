@@ -4,7 +4,7 @@ if __name__ == "__main__":
 
 WINDOW_HEIGHT               = 400
 WINDOW_WIDTH                = 800
-WINDOW_TITLE                = "Dino Game"
+WINDOW_TITLE                = "Farm Run"
 FPS_CAP                     = 60
 GROUND_Y                    = 300
 ANIMATION_FPS               = 10            # For all animations

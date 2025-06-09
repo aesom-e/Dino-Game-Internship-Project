@@ -12,6 +12,7 @@ import input_handler
 import text_handler
 import sprite_handler
 import objects
+import sound
 
 # Used so that code can be written like state_handler.current_state = state_handler.DEAD
 PLAYING = "_playing"
@@ -99,9 +100,12 @@ def handle() -> None:
             sprite_handler.handle_collisions()
         case "_dead":
             # Draw the frame
-            display.draw_objects()
+            display.draw_objects(draw_player=False)
             display.draw_leaderboard()
         case "_paused":
+            # Pause the music
+            sound.music.pause()
+
             # Draw the frame like normal
             display.draw_background()
             display.draw_objects()

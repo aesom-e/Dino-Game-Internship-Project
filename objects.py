@@ -22,7 +22,7 @@ def _resume_game() -> None:
 def _main_menu() -> None:
     # Reset all state
     handlers.reset_state()
-
+    
     state_handler.current_state = state_handler.MENU
 
 def _egg_collision() -> None:
@@ -33,7 +33,7 @@ def _egg_collision() -> None:
     sound.play("hit.wav")
 
     # Move the egg back
-    sprite_handler.set_sprite_position(EGG_SPRITE, (constants.WINDOW_WIDTH - random.randint(0, constants.ITEM_RESPAWN_VARIANCE),                                                    
+    sprite_handler.set_sprite_position(EGG_SPRITE, (constants.WINDOW_WIDTH - random.randint(0, constants.ITEM_RESPAWN_VARIANCE),
                                                     constants.GROUND_Y - constants.EGG_SIZE))
     
     # Handle the player lives
@@ -65,7 +65,7 @@ def _chicken_collision() -> None:
 
 def _play_game() -> None:
     state_handler.current_state = state_handler.PLAYING
-    #sound.music.set("music.wav")
+    sound.music.set("music.mp3")
 
 def _how_to() -> None:
     state_handler.current_state = state_handler.HOW_TO
