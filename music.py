@@ -10,7 +10,6 @@ def set(music_name: str) -> None:
     Args:
         music_name (str): The name of the music file to play
     """
-
     pygame.mixer.music.load("sounds/music/" + music_name)
     pygame.mixer.music.play(-1)
 

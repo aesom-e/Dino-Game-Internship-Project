@@ -1,0 +1,13 @@
+Features ordered by the time taken to implement
+- Objects without classes for modularity
+- Main menu and how-to screen (made much faster with the object system)
+- Power ups
+- Leaderboard
+- Second enemy
+- Score
+- Strafing left and right
+- Extra lives
+- Scaling difficulty by speeding up
+- Double jump
+- Quickfalling
+- Music and sound effects

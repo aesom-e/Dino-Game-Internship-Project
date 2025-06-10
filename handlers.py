@@ -30,11 +30,19 @@ def handle_events() -> None:
         match state_handler.current_state:
             case state_handler.PLAYING:
                 # Handle jumping
-                if ((event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE) or event.type == pygame.MOUSEBUTTONDOWN) and state.can_jump():
+                if ((event.type == pygame.KEYDOWN and
+                     (event.key == pygame.K_SPACE or event.key == pygame.K_w or event.key == pygame.K_UP))
+                   or event.type == pygame.MOUSEBUTTONDOWN) and state.can_jump():
                     if assets.player_rectangle.bottom < constants.GROUND_Y:
                         state.double_jumped = True
                     state.player_y_speed = constants.JUMP_GRAVITY_START_SPEED
                     sound.play("jump.wav")
+
+                # Handle quickfalling
+                elif event.type == pygame.KEYDOWN and \
+                     (event.key == pygame.K_s or event.key == pygame.K_DOWN) and \
+                     assets.player_rectangle.bottom < constants.GROUND_Y:
+                    state.player_y_speed = -constants.QUICKFALL_SPEED
                 
                 # Handle pausing
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
@@ -139,9 +147,9 @@ def handle_power_up_roll() -> None:
 def handle_player_running() -> None:
     """Handles the left and right running of the player"""
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_a] and assets.player_rectangle.left > 0:
+    if (keys[pygame.K_a] or keys[pygame.K_LEFT]) and assets.player_rectangle.left > 0:
         assets.player_rectangle.left -= constants.PLAYER_RUN_SPEED
-    elif keys[pygame.K_d] and assets.player_rectangle.right < constants.PLAYER_RUN_BOUNDARY:
+    elif (keys[pygame.K_d] or keys[pygame.K_RIGHT]) and assets.player_rectangle.right < constants.PLAYER_RUN_BOUNDARY:
         assets.player_rectangle.left += constants.PLAYER_RUN_SPEED
 
 def handle_death() -> None:

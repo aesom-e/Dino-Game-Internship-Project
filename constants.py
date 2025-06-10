@@ -9,6 +9,7 @@ FPS_CAP                     = 60
 GROUND_Y                    = 300
 ANIMATION_FPS               = 10            # For all animations
 JUMP_GRAVITY_START_SPEED    = 15            # The speed at which the player jumps
+QUICKFALL_SPEED             = 20
 DEFAULT_FONT_SIZE           = 50
 SMALL_FONT_SIZE             = 26
 MENU_TITLE_FONT_SIZE        = 40
