@@ -12,14 +12,14 @@ import objects
 
 if __name__ == "__main__":
     # Once Python has figured everything out with the other files,
-    # register the objects' states with the state_handler
+    # register the objects' states with the state handler
     objects.register_objects_states()
 
     while True:
         # Handle PyGame events
         handle_events()
         
-        # Let the state handle do its job
+        # Let the state handler do its job
         state_handler.handle()
 
         # Draw to the physical screen and enforce the FPS cap

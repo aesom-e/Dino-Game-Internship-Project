@@ -198,3 +198,4 @@ def reset_state() -> None:
     state.double_score_frames = 0
     sprite_handler.set_sprite_status(objects.POWER_UP_SPRITE, False)
     state.current_power_up = False
+    state.player_animation = "walk_1"
