@@ -91,6 +91,7 @@ def handle() -> None:
             handlers.handle_moving_objects()
             handlers.handle_player_movement()
             handlers.handle_power_up_roll()
+            handlers.handle_player_running()
 
             # Draw the frame
             display.draw_background()

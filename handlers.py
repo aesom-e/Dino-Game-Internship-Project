@@ -136,6 +136,14 @@ def handle_power_up_roll() -> None:
                                                                   on_collision=state.current_power_up[1])
             sprite_handler.set_sprite_status(objects.POWER_UP_SPRITE, True)
 
+def handle_player_running() -> None:
+    """Handles the left and right running of the player"""
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_a] and assets.player_rectangle.left > 0:
+        assets.player_rectangle.left -= constants.PLAYER_RUN_SPEED
+    elif keys[pygame.K_d] and assets.player_rectangle.right < constants.PLAYER_RUN_BOUNDARY:
+        assets.player_rectangle.left += constants.PLAYER_RUN_SPEED
+
 def handle_death() -> None:
     """Called when the player dies. Handles the resetting of state variables and leaderboard"""    
     # Update the score display

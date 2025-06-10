@@ -1,0 +1,2 @@
+-> Change the powerup sprites
+-> Add a scrolling background

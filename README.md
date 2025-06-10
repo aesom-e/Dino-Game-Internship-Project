@@ -29,6 +29,4 @@ Once you are familiar, begin adding your features to the game. Make sure to docu
 
 Some features for you to consider adding:
 
-- Change the player, enemies, and environmental assets
 - Add a settings menu
-- Add sound effects and background music

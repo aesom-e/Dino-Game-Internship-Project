@@ -14,7 +14,8 @@ import text_handler
 import sprite_handler
 import sound
 
-# Object functions. No docstrings for these
+# Object functions. No docstrings for the ones that I consider to be self-explanitory
+# Do you really want to read """Resumes the game""" below _resume_game?
 def _resume_game() -> None:
     state_handler.current_state = state_handler.PLAYING
     sound.music.play()
@@ -26,6 +27,7 @@ def _main_menu() -> None:
     state_handler.current_state = state_handler.MENU
 
 def _egg_collision() -> None:
+    """Handles everything to do with the player collision with the egg"""
     # Check if the god mode is active
     if state.god_mode_frames: return
 
@@ -43,6 +45,7 @@ def _egg_collision() -> None:
     handlers.handle_death()
 
 def _chicken_collision() -> None:
+    """Handles everything to do with the player collision with the chickent"""
     # Check if god mode is active
     if state.god_mode_frames: return
 
@@ -170,7 +173,7 @@ MAIN_MENU_TITLE = text_handler.register_text((400, constants.MENU_TITLE_FONT_SIZ
                                              constants.MENU_TITLE_FONT_SIZE,
                                              constants.WINDOW_TITLE)
 
-MENU_PLAY_BUTTON = input_handler.register_button((400, 300, None, constants.MENU_FONT_SIZE, "centered"),
+MENU_PLAY_BUTTON = input_handler.register_button((400, 260, None, constants.MENU_FONT_SIZE, "centered"),
                                                  (0, 0, 0),
                                                  (180, 120, 20),
                                                  None,
@@ -187,7 +190,7 @@ MENU_QUIT_BUTTON = input_handler.register_button((400, 340, None, constants.MENU
                                                  "Quit",
                                                  _quit_game)
 
-MENU_HOW_TO_BUTTON = input_handler.register_button((400, 260, None, constants.MENU_FONT_SIZE, "centered"),
+MENU_HOW_TO_BUTTON = input_handler.register_button((400, 300, None, constants.MENU_FONT_SIZE, "centered"),
                                                    (0, 0, 0),
                                                    (30, 120, 30),
                                                    None,
@@ -229,26 +232,30 @@ HOW_TO_ENTRIES = [text_handler.register_text((150, 100),
                                              (0, 0, 0),
                                              constants.MENU_SMALL_FONT_SIZE,
                                              "enemies"),
-                  text_handler.register_text((150, 240),
+                  text_handler.register_text((150, 230),
                                              (0, 0, 0),
                                              constants.MENU_SMALL_FONT_SIZE,
                                              "Everything speeds"),
-                  text_handler.register_text((150, 260),
+                  text_handler.register_text((150, 250),
                                              (0, 0, 0),
                                              constants.MENU_SMALL_FONT_SIZE,
                                              "up as the game"),
-                  text_handler.register_text((150, 280),
+                  text_handler.register_text((150, 270),
                                              (0, 0, 0),
                                              constants.MENU_SMALL_FONT_SIZE,
                                              "progresses"),
-                  text_handler.register_text((150, 320),
+                  text_handler.register_text((150, 300),
                                              (0, 0, 0),
                                              constants.MENU_SMALL_FONT_SIZE,
                                              "Press esc to"),
+                  text_handler.register_text((150, 320),
+                                             (0, 0, 0),
+                                             constants.MENU_SMALL_FONT_SIZE,
+                                             "pause the game,"),
                   text_handler.register_text((150, 340),
                                              (0, 0, 0),
                                              constants.MENU_SMALL_FONT_SIZE,
-                                             "pause the game"),
+                                             "A and D to strafe"),
                   
                   text_handler.register_text((400, 100),
                                              (0, 0, 0),
@@ -301,7 +308,8 @@ HOW_TO_ENTRIES = [text_handler.register_text((150, 100),
                                              "for 2 secs")]
 
 HOW_TO_SPRITES = [sprite_handler.register_sprite((320, 140, 50, 50),
-                                                 ["graphics/enemies/egg_1.png", "graphics/enemies/egg_2.png"],
+                                                 ["graphics/enemies/tweaking_egg_1.png", "graphics/enemies/tweaking_egg_2.png",
+                                                  "graphics/enemies/tweaking_egg_3.png", "graphics/enemies/tweaking_egg_4.png"],
                                                  True,
                                                  None),
                   sprite_handler.register_sprite((320, 210, 50, 50),

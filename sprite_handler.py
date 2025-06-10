@@ -177,10 +177,12 @@ def draw_sprites() -> None:
             if isinstance(image, list):
                 assets.screen.blit(image[int(frame / (constants.FPS_CAP/constants.ANIMATION_FPS))], rectangle)
                 
-                # Increment the frame counter
-                _sprites[_][6] += 1
-                if _sprites[_][6] >= len(image) * (constants.FPS_CAP / constants.ANIMATION_FPS):
-                    _sprites[_][6] = 0
+                # Increment the frame counter if the game is not paused
+                import state_handler # Needs to be done here for Python reasons
+                if state_handler.current_state != state_handler.PAUSED:
+                    _sprites[_][6] += 1
+                    if _sprites[_][6] >= len(image) * (constants.FPS_CAP / constants.ANIMATION_FPS):
+                        _sprites[_][6] = 0
             else:
                 assets.screen.blit(image, rectangle)
 
