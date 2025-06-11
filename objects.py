@@ -36,7 +36,7 @@ def _egg_collision() -> None:
 
     # Move the egg back
     sprite_handler.set_sprite_position(EGG_SPRITE, (constants.WINDOW_WIDTH - random.randint(0, constants.ITEM_RESPAWN_VARIANCE),
-                                                    constants.GROUND_Y - constants.EGG_SIZE))
+                                                    constants.GROUND_Y - constants.EGG_SIZE - 8))
     
     # Handle the player lives
     if state.player_lives > 1:
@@ -155,7 +155,7 @@ POWER_UP_SPRITE = sprite_handler.register_sprite((0, 0, constants.POWER_UP_SIZE,
                                                  True,
                                                  None)
 
-EGG_SPRITE = sprite_handler.register_sprite((0, constants.GROUND_Y, constants.EGG_SIZE, constants.EGG_SIZE),
+EGG_SPRITE = sprite_handler.register_sprite((-1000, constants.GROUND_Y, constants.EGG_SIZE, constants.EGG_SIZE),
                                             ["graphics/enemies/tweaking_egg_1.png",
                                              "graphics/enemies/tweaking_egg_2.png",
                                              "graphics/enemies/tweaking_egg_3.png",
@@ -163,7 +163,7 @@ EGG_SPRITE = sprite_handler.register_sprite((0, constants.GROUND_Y, constants.EG
                                             True,
                                             _egg_collision)
 
-CHICKEN_SPRITE = sprite_handler.register_sprite((0, constants.GROUND_Y-constants.CHICKEN_HEIGHT, constants.CHICKEN_SIZE, constants.CHICKEN_SIZE),
+CHICKEN_SPRITE = sprite_handler.register_sprite((-1000, constants.GROUND_Y-constants.CHICKEN_HEIGHT, constants.CHICKEN_SIZE, constants.CHICKEN_SIZE),
                                                 ["graphics/enemies/chicken_1.png", "graphics/enemies/chicken_2.png"],
                                                 True,
                                                 _chicken_collision)

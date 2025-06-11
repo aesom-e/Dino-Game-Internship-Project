@@ -51,7 +51,7 @@ def handle_events() -> None:
                 # Handle restarting the game
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                     state.player_is_alive = True
-                    sprite_handler.set_sprite_position(objects.EGG_SPRITE, (0, 0))
+                    reset_state()
                     state_handler.current_state = state_handler.PLAYING
             case state_handler.PAUSED:
                 # Handle unpausing
@@ -86,9 +86,9 @@ def handle_moving_objects() -> None:
     """Handles the movement of objects like the egg and power-ups"""
     # Handle the movement of the egg
     sprite_handler.move_sprite(objects.EGG_SPRITE, (-state.item_speed, 0))
-    if sprite_handler.get_sprite_position(objects.EGG_SPRITE)[0] <= 0:
+    if sprite_handler.get_sprite_position(objects.EGG_SPRITE)[0] <= -constants.EGG_SIZE:
         sprite_handler.set_sprite_position(objects.EGG_SPRITE, (constants.WINDOW_WIDTH - random.randint(0, constants.ITEM_RESPAWN_VARIANCE),
-                                                                constants.GROUND_Y - constants.EGG_SIZE))
+                                                                constants.GROUND_Y - constants.EGG_SIZE - 8))
         if state.item_speed < constants.ITEM_SPEED_CAP:
             state.item_speed += 1 # Increase the egg speed each loop to make the game harder
     
@@ -96,7 +96,7 @@ def handle_moving_objects() -> None:
     if state.score > constants.CHICKEN_SPAWN_SCORE and not state.chicken_spawn_delay:
         sprite_handler.set_sprite_status(objects.CHICKEN_SPRITE, True)
         sprite_handler.move_sprite(objects.CHICKEN_SPRITE, (-state.item_speed*0.75, 0))
-        if sprite_handler.get_sprite_position(objects.CHICKEN_SPRITE)[0] <= 0:
+        if sprite_handler.get_sprite_position(objects.CHICKEN_SPRITE)[0] <= -constants.CHICKEN_SIZE:
             sprite_handler.set_sprite_position(objects.CHICKEN_SPRITE, (constants.WINDOW_WIDTH - random.randint(0, constants.ITEM_RESPAWN_VARIANCE),
                                                                         constants.GROUND_Y - constants.CHICKEN_SIZE - constants.CHICKEN_HEIGHT))
             # Create a delay before the chicken spawns again
@@ -144,8 +144,8 @@ def handle_power_up_roll() -> None:
                                                                   on_collision=state.current_power_up[1])
             sprite_handler.set_sprite_status(objects.POWER_UP_SPRITE, True)
 
-def handle_player_running() -> None:
-    """Handles the left and right running of the player"""
+def handle_player_strafing() -> None:
+    """Handles the left and right strafing of the player"""
     keys = pygame.key.get_pressed()
     if (keys[pygame.K_a] or keys[pygame.K_LEFT]) and assets.player_rectangle.left > 0:
         assets.player_rectangle.left -= constants.PLAYER_RUN_SPEED
@@ -200,10 +200,11 @@ def reset_state() -> None:
     state.player_y_speed = 0
     state.double_jumped = False
     assets.player_rectangle = assets.player_surface.get_rect(bottomleft=(25, constants.GROUND_Y))
-    sprite_handler.set_sprite_position(objects.EGG_SPRITE, (0, 0))
-    sprite_handler.set_sprite_position(objects.CHICKEN_SPRITE, (0, 0))
+    sprite_handler.set_sprite_position(objects.EGG_SPRITE, (-1000, 0))
+    sprite_handler.set_sprite_position(objects.CHICKEN_SPRITE, (-1000, 0))
     state.god_mode_frames = 0
     state.double_score_frames = 0
     sprite_handler.set_sprite_status(objects.POWER_UP_SPRITE, False)
     state.current_power_up = False
     state.player_animation = "walk_1"
+    state.background_x = 0

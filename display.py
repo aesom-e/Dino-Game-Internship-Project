@@ -9,7 +9,7 @@ import state
 import input_handler
 import text_handler
 import sprite_handler
-import objects
+import state_handler
 
 def wipe() -> None:
     """Wipes the screen"""
@@ -25,8 +25,15 @@ def draw_solid_background(colour: tuple[int, int, int]) -> None:
 
 def draw_background() -> None:
     """Draws the background of the game"""
-    assets.screen.blit(assets.SKY_SURFACE, (0, 0))
-    assets.screen.blit(assets.GROUND_SURFACE, (0, constants.GROUND_Y))
+    assets.screen.blit(assets.BACKGROUND_SURFACE, (state.background_x, 0))
+
+    # Move the background
+    if state_handler.current_state != state_handler.PAUSED:
+        state.background_x -= 1
+        if state.background_x < -399:
+            assets.screen.blit(assets.BACKGROUND_SURFACE, (state.background_x + 1199, 0))
+        if state.background_x < -1199:
+            state.background_x += 1200
 
     # Draw the hearts
     for _ in range(state.player_lives):

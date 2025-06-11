@@ -8,8 +8,7 @@ import state
 import input_handler
 
 # Constant assets
-SKY_SURFACE                = pygame.image.load("graphics/level/sky.png").convert()
-GROUND_SURFACE             = pygame.image.load("graphics/level/ground.png").convert()
+BACKGROUND_SURFACE         = pygame.transform.scale(pygame.image.load("graphics/level/background.png").convert(), (1200, 400))
 HEART_SURFACE              = pygame.transform.scale(pygame.image.load("graphics/level/heart.png").convert_alpha(),
                                                     (constants.HEART_SIZE, constants.HEART_SIZE))
 GOLD_HEART_SURFACE         = pygame.transform.scale(pygame.image.load("graphics/level/heart_gold.png").convert_alpha(),
@@ -22,11 +21,11 @@ LEADERBOARD_TEXT_RECTANGLE = LEADERBOARD_TEXT.get_rect(center=(600, 50))
 # Non-constant assets
 score_surface     = None
 score_rectangle   = None
-player_surface    = pygame.image.load("graphics/player/player_walk_1.png").convert_alpha()
+player_animations = {"walk_1": pygame.transform.scale(pygame.image.load("graphics/player/player_walk_1.png").convert_alpha(), (48, 64)),
+                     "walk_2": pygame.transform.scale(pygame.image.load("graphics/player/player_walk_2.png").convert_alpha(), (48, 64)),
+                     "jump":   pygame.transform.scale(pygame.image.load("graphics/player/player_jump.png").convert_alpha(),   (48, 64))}
+player_surface    = player_animations["walk_1"]
 player_rectangle  = player_surface.get_rect(bottomleft=(25, constants.GROUND_Y))
-player_animations = {"walk_1": pygame.image.load("graphics/player/player_walk_1.png").convert_alpha(),
-                     "walk_2": pygame.image.load("graphics/player/player_walk_2.png").convert_alpha(),
-                     "jump":   pygame.image.load("graphics/player/player_jump.png").convert_alpha()}
 
 def update_player_sprite() -> None:
     """Updates the player's sprite. Called each frame"""

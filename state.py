@@ -19,6 +19,7 @@ current_power_up    = None
 god_mode_frames     = 0
 double_score_frames = 0
 chicken_spawn_delay = 0
+background_x        = 0
 
 def can_jump() -> bool:
     """Checks if the player can jump

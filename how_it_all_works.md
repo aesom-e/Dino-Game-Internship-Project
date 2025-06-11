@@ -62,4 +62,4 @@ The player is the most important of these. It contains more specialty code than 
 
 The leaderboard entries are also non-objects. It would be a bigger challenge for me to do it the "easier" way with objects than to use PyGame objects
 
-The last thing that is just a base PyGame pair of sprite and rectangle are the hearts. I figured that it would be more effort than it would be worth to create a dynamic object registration to account for changes in the max number of lives.
+The last thing that is just a base PyGame pair of sprite and rectangle are the hearts. I figured that it would be more effort than it would be worth to implement dynamic object registration to account for changes in the max number of lives.
