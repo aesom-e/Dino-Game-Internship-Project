@@ -28,15 +28,15 @@ def _main_menu() -> None:
 
 def _egg_collision() -> None:
     """Handles everything to do with the player collision with the egg"""
+    # Move the egg back
+    sprite_handler.set_sprite_position(EGG_SPRITE, (constants.WINDOW_WIDTH - random.randint(0, constants.ITEM_RESPAWN_VARIANCE),
+                                                    constants.GROUND_Y - constants.EGG_SIZE - 8))
+
     # Check if the god mode is active
     if state.god_mode_frames: return
 
     # Play the sound
     sound.play("hit.wav")
-
-    # Move the egg back
-    sprite_handler.set_sprite_position(EGG_SPRITE, (constants.WINDOW_WIDTH - random.randint(0, constants.ITEM_RESPAWN_VARIANCE),
-                                                    constants.GROUND_Y - constants.EGG_SIZE - 8))
     
     # Handle the player lives
     if state.player_lives > 1:
@@ -46,15 +46,15 @@ def _egg_collision() -> None:
 
 def _chicken_collision() -> None:
     """Handles everything to do with the player collision with the chickent"""
+    # Move the chicken back
+    sprite_handler.set_sprite_position(CHICKEN_SPRITE, (constants.WINDOW_WIDTH - random.randint(0, constants.ITEM_RESPAWN_VARIANCE),
+                                                        constants.GROUND_Y - constants.CHICKEN_SIZE - constants.CHICKEN_HEIGHT))
+
     # Check if god mode is active
     if state.god_mode_frames: return
 
     # Play the sound
     sound.play("hit.wav")
-
-    # Move the chicken back
-    sprite_handler.set_sprite_position(CHICKEN_SPRITE, (constants.WINDOW_WIDTH - random.randint(0, constants.ITEM_RESPAWN_VARIANCE),
-                                                        constants.GROUND_Y - constants.CHICKEN_SIZE - constants.CHICKEN_HEIGHT))
 
     # Create a delay before the chicken spawns again
     state.chicken_spawn_delay = random.randint(30, 90)
