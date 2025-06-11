@@ -37,9 +37,9 @@ This whole concept was based on code I've previously written in C for SDL. The i
 
 The 3 different object's I've written code for here are buttons (input_handler.py), text (text_handler.py), and sprites (sprite_handler.py).
 
-Each object is assigned an ID and with that ID, the user can modify the object. Each handler also handles drawing and processing of objects. For example, in input_handler.py, the handle_click function is called whenever a click is processed and checks if the user clicked on a valid button.
+Each object is assigned an ID and with that ID, the user can modify the object. Each handler also handles drawing and processing of objects. For example, in input_handler.py, the handle_click function is called for each button whenever a click is processed if the click is within the button.
 
-The reason I've done this is to increase the modularity of my program. I've sacraficed a couple of hours to allow me to create new pieces in seconds. With this method, creating new UI elements takes literally a single minute, processing and all.
+The reason I've done this is to increase the modularity of my program. I've sacraficed a couple of hours to allow me to create new pieces in seconds. With this method, creating new UI elements takes a single minute, processing and all.
 
 ### Buttons
 
